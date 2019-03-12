@@ -148,6 +148,84 @@ def hero(weak_group, medium_group):
     compute_derived_stats(base)
     return base
 
+def tough(half_one, half_two):
+    base = god()
+    # weak group
+    if half_one == PHYSICAL:
+        base['label'] = "Tough - Halfed Physical"
+        base['strength'] = math.trunc(0.5 * base['strength'])
+        base['toughness'] = math.trunc(0.5 * base['toughness'])
+    elif half_one == FINESSE:
+        base['label'] = "Tough - Halfed Finesse"
+        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
+        base['speed'] = math.trunc(0.5 * base['speed'])
+    elif half_one == MENTAL:
+        base['label'] = "Tough - Halfed Mental"
+        base['intellect'] = math.trunc(0.5 * base['intellect'])
+        base['spirit'] = math.trunc(0.5 * base['spirit'])
+    if half_two == PHYSICAL:
+        base['label'] = ", Halfed Physical"
+        base['strength'] = math.trunc(0.5 * base['strength'])
+        base['toughness'] = math.trunc(0.5 * base['toughness'])
+    elif half_two == FINESSE:
+        base['label'] = ", Halfed Finesse"
+        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
+        base['speed'] = math.trunc(0.5 * base['speed'])
+    elif half_two == MENTAL:
+        base['label'] = ", Halfed Mental"
+        base['intellect'] = math.trunc(0.5 * base['intellect'])
+        base['spirit'] = math.trunc(0.5 * base['spirit'])
+    compute_derived_stats(base)
+    return base
+
+def decent(half_one, half_two):
+    base = god()
+    # weak group
+    if half_one == PHYSICAL:
+        base['label'] = "Decent - Halfed Physical"
+        base['strength'] = math.trunc(0.5 * base['strength'])
+        base['toughness'] = math.trunc(0.5 * base['toughness'])
+    elif half_one == FINESSE:
+        base['label'] = "Decent - Halfed Finesse"
+        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
+        base['speed'] = math.trunc(0.5 * base['speed'])
+    elif half_one == MENTAL:
+        base['label'] = "Decent - Halfed Mental"
+        base['intellect'] = math.trunc(0.5 * base['intellect'])
+        base['spirit'] = math.trunc(0.5 * base['spirit'])
+    if half_two == PHYSICAL:
+        base['label'] = ", Halfed Physical"
+        base['strength'] = math.trunc(0.5 * base['strength'])
+        base['toughness'] = math.trunc(0.5 * base['toughness'])
+    elif half_two == FINESSE:
+        base['label'] = ", Halfed Finesse"
+        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
+        base['speed'] = math.trunc(0.5 * base['speed'])
+    elif half_two == MENTAL:
+        base['label'] = ", Halfed Mental"
+        base['intellect'] = math.trunc(0.5 * base['intellect'])
+        base['spirit'] = math.trunc(0.5 * base['spirit'])
+    if ((half_one == PHYSICAL and half_two == FINESSE) or
+        (half_two == PHYSICAL and half_one == FINESSE)):
+        base['intellect'] = match.truc(0.75 * base['intellect'])
+        base['spirit'] = match.truc(0.75 * base['spirit'])
+    elif ((half_one == PHYSICAL and half_two == Mental) or
+          (half_two == PHYSICAL and half_one == Mental)):
+        base['dexterity'] = math.trunc(0.75 * base['dexterity'])
+        base['speed'] = math.trunc(0.75 * base['speed'])
+    elif ((half_one == FINESSE and half_two == MENTAL) or
+          (half_two == FINESSE and half_two == MENTAL)):
+        base['strength'] = math.trunc(0.75 * base['strength'])
+        base['toughness'] = math.trunc(0.75 * base['toughness'])
+    compute_derived_stats(base)
+    return base
+
+def normal():
+    return None
+
+def weenie():
+    return None
+        
 def main():
     bs = god()
     print bs
