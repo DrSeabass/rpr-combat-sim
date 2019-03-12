@@ -14,10 +14,15 @@ def plot_derived(stat_list, derived):
         plotter.plot(points_derived_by_level(stat, derived), label=stat['label'])
     plotter.xlabel('Level')
     plotter.ylabel(derived)
+    plotter.title("HP by Level")
+    plotter.legend()
     plotter.show()
 
 if __name__ == '__main__':
-    individual = stats.god()
-    plot_derived([individual], 'max_hp')
+    god = stats.god()
+    minor = stats.minor_diety(stats.PHYSICAL)
+    demi_split_phys = stats.demigod(stats.MENTAL, stats.PHYSICAL)
+    hero_weak_phys = stats.hero(stats.PHYSICAL, stats.FINESSE)
+    plot_derived([god, minor, demi_split_phys, hero_weak_phys], 'max_hp')
 
 

@@ -1,6 +1,9 @@
 import math
 
 MAX_STAT = 255
+PHYSICAL = 0
+FINESSE = 1
+MENTAL = 2
 
 def base_stats():
     return {
@@ -43,17 +46,6 @@ def compute_derived_stats(base):
     base['physical_resist'] = compute_physical_resist(base)
     base['magic_attunement'] = compute_magic_attunement(base)
 
-def god():
-    stats = { 'label' : "",
-              'strength' : MAX_STAT,
-              'toughness': MAX_STAT,
-              'dexterity': MAX_STAT,
-              'speed' : MAX_STAT,
-              'intellect' : MAX_STAT,
-              'spirit' : MAX_STAT }
-    compute_derived_stats(stats)
-    return stats
-
 def stats_of_level(stats, level):
     ret_val = {
         'strength' : (stats['strength'] * level) / 100,
@@ -65,12 +57,100 @@ def stats_of_level(stats, level):
     }
     compute_derived_stats(ret_val)
     return ret_val
+    
+def god():
+    stats = { 'label' : "God",
+              'strength' : MAX_STAT,
+              'toughness': MAX_STAT,
+              'dexterity': MAX_STAT,
+              'speed' : MAX_STAT,
+              'intellect' : MAX_STAT,
+              'spirit' : MAX_STAT }
+    compute_derived_stats(stats)
+    return stats
 
+def minor_diety(weak_group):
+    base = god()
+    if weak_group == PHYSICAL:
+        base['label'] = "Minor Diety - Weak Physical"
+        base['strength'] = math.trunc(0.75 * base['strength'])
+        base['toughness'] = math.trunc(0.75 * base['toughness'])
+    elif weak_group == FINESSE:
+        base['label'] = "Minor Diety - Weak Finesse"
+        base['dexterity'] = math.trunc(0.75 * base['dexterity'])
+        base['speed'] = math.trunc(0.75 * base['speed'])
+    elif weak_group == MENTAL:
+        base['label'] = "Minor Diety - Weak Mental"
+        base['intellect'] = math.trunc(0.75 * base['intellect'])
+        base['spirit'] = math.trunc(0.75 * base['spirit'])
+    compute_derived_stats(base)
+    return base
+
+def demigod(weak_group, split_group):
+    base = god()
+    # weak group
+    if weak_group == PHYSICAL:
+        base['label'] = "Demigod - Weak Physical"
+        base['strength'] = math.trunc(0.75 * base['strength'])
+        base['toughness'] = math.trunc(0.75 * base['toughness'])
+    elif weak_group == FINESSE:
+        base['label'] = "Demigod - Weak Finesse"
+        base['dexterity'] = math.trunc(0.75 * base['dexterity'])
+        base['speed'] = math.trunc(0.75 * base['speed'])
+    elif weak_group == MENTAL:
+        base['label'] = "Demigod - Weak Mental"
+        base['intellect'] = math.trunc(0.75 * base['intellect'])
+        base['spirit'] = math.trunc(0.75 * base['spirit'])
+    # split group
+    if split_group == PHYSICAL:
+        base['label'] += ", Split Physical"
+        base['strength'] = math.trunc(0.875 * base['strength'])
+        base['toughness'] = math.trunc(0.875 * base['toughness'])
+    elif split_group == FINESSE:
+        base['label'] += ", Split Finesse"
+        base['dexterity'] = math.trunc(0.875 * base['dexterity'])
+        base['speed'] = math.trunc(0.875 * base['speed'])
+    elif split_group == MENTAL:
+        base['label'] += ", Split Mental"
+        base['intellect'] = math.trunc(0.875 * base['intellect'])
+        base['spirit'] = math.trunc(0.875 * base['spirit'])
+    compute_derived_stats(base)
+    return base
+
+def hero(weak_group, medium_group):
+    base = god()
+    # weak group
+    if weak_group == PHYSICAL:
+        base['label'] = "Hero - Weak Physical"
+        base['strength'] = math.trunc(0.5 * base['strength'])
+        base['toughness'] = math.trunc(0.5 * base['toughness'])
+    elif weak_group == FINESSE:
+        base['label'] = "Hero - Weak Finesse"
+        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
+        base['speed'] = math.trunc(0.5 * base['speed'])
+    elif weak_group == MENTAL:
+        base['label'] = "Hero - Weak Mental"
+        base['intellect'] = math.trunc(0.5 * base['intellect'])
+        base['spirit'] = math.trunc(0.5 * base['spirit'])
+    # medium group
+    if medium_group == PHYSICAL:
+        base['label'] += ", Medium Physical"
+        base['strength'] = math.trunc(0.75 * base['strength'])
+        base['toughness'] = math.trunc(0.75 * base['toughness'])
+    elif medium_group == FINESSE:
+        base['label'] += ", Medium Finesse"
+        base['dexterity'] = math.trunc(0.75 * base['dexterity'])
+        base['speed'] = math.trunc(0.75 * base['speed'])
+    elif medium_group == MENTAL:
+        base['label'] += ", Medium Mental"
+        base['intellect'] = math.trunc(0.75 * base['intellect'])
+        base['spirit'] = math.trunc(0.75 * base['spirit'])
+    compute_derived_stats(base)
+    return base
 
 def main():
     bs = god()
     print bs
-
 
 if __name__ == '__main__':
     main()
