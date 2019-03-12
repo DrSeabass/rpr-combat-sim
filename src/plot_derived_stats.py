@@ -23,4 +23,8 @@ if __name__ == '__main__':
     minor = stats.minor_diety(stats.PHYSICAL)
     demi_split_phys = stats.demigod(stats.MENTAL, stats.PHYSICAL)
     hero_weak_phys = stats.hero(stats.PHYSICAL, stats.FINESSE)
-    plot_derived([god, minor, demi_split_phys, hero_weak_phys], 'max_hp')
+    tough_weak_phys = stats.tough(stats.PHYSICAL, stats.FINESSE)
+    normal_weak_phys = stats.normal(stats.PHYSICAL, stats.FINESSE)
+    weenie_weak_phys = stats.weenie(stats.PHYSICAL, stats.FINESSE)
+    plot_derived([god, minor, demi_split_phys, hero_weak_phys,
+                  tough_weak_phys, normal_weak_phys, weenie_weak_phys], 'max_hp')
