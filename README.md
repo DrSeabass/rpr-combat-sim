@@ -21,6 +21,7 @@ balance.
 python
 python-pip
 libtk-img libtk-imgdev
+python-tk
 pip via pip, python -m pip install -U pip
 matplotlib via pip, python -m pip install -U matplotlib
 
