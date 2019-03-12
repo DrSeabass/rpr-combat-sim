@@ -8,6 +8,7 @@ MENTAL = 2
 def base_stats():
     return {
         'label' : "",
+        'level' : 100,
         'strength' : 0,
         'toughness': 0,
         'dexterity': 0,
@@ -19,12 +20,14 @@ def base_stats():
 def compute_max_hp(base):
     str = base['strength']
     tgh = base['toughness']
-    min_val = 100
+    min_val = 100 
     max_val = 10000
-    base = (min_val + str + 5 * tgh)
+    base = min_val + 15 * base['level'] + 2 * str + tgh * 5
     rem = max_val - base
-    boost = ((1.0 * str  * tgh) / (MAX_STAT * MAX_STAT))
-    return base + math.trunc(rem * boost)
+    half_rem = rem / 2
+    tgh_str_boost = (tgh * str * 1.0) / (MAX_STAT * MAX_STAT)
+    tgh_boost = (1.0 * tgh * tgh * tgh) / (MAX_STAT * MAX_STAT * MAX_STAT)
+    return base + math.trunc(half_rem * tgh_str_boost + half_rem * tgh_boost)
 
 def compute_max_ap(base):
     return base['spirit'] + base['intellect'] + 90
@@ -48,6 +51,8 @@ def compute_derived_stats(base):
 
 def stats_of_level(stats, level):
     ret_val = {
+        'label' : stats['label'],
+        'level' : level,
         'strength' : (stats['strength'] * level) / 100,
         'toughness' : (stats['toughness'] * level) / 100,
         'dexterity' : (stats['dexterity'] * level) / 100,
@@ -60,6 +65,7 @@ def stats_of_level(stats, level):
     
 def god():
     stats = { 'label' : "God",
+              'level' : 100, 
               'strength' : MAX_STAT,
               'toughness': MAX_STAT,
               'dexterity': MAX_STAT,
