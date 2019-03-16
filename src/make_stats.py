@@ -1,6 +1,9 @@
 import math
 
 MAX_STAT = 255
+MAX_HP = 10000
+MAX_AP = 1000
+MAX_LEVEL = 100
 PHYSICAL = 0
 FINESSE = 1
 MENTAL = 2
@@ -21,7 +24,7 @@ def compute_max_hp(base):
     str = base['strength']
     tgh = base['toughness']
     min_val = 100 
-    max_val = 10000
+    max_val = MAX_HP
     base = min_val + 15 * base['level'] + 2 * str + tgh * 5
     rem = max_val - base
     half_rem = rem / 2
@@ -34,7 +37,7 @@ def compute_max_ap(base):
     inte = base['intellect']
     lvl = base['level']
     min_val = 10
-    max_val = 1000
+    max_val = MAX_AP
     baseVal = min_val + 3 * (lvl / 2) + (spr + inte) / 2
     rem = max_val - baseVal
     scale = 1 - 0.2 * (spr * inte) / (MAX_STAT * MAX_STAT) 
