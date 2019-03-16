@@ -36,12 +36,20 @@ def check_hit(attacker, target):
         else:
             return HIT
 
-def simulate_attacks(attack, target, samples=100):
+def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
     results = []
     for level in range(1,100):
         this_level = []
-        atk_level = stats.stats_of_level(attack, level)
-        trg_level = stats.stats_of_level(target, level)
+        atk_level = None
+        trg_level = None
+        if atk_levels is None:
+            atk_level = stats.stats_of_level(attack, level)
+        else:
+            atk_level = stats.stats_of_level(attack, atk_levels[level])
+        if trg_levels is None:
+            trg_level = stats.stats_of_level(target, level)
+        else:
+            trg_level = stats.stats_of_level(target, trg_levels[level])
         crit_count = 0
         hit_count = 0
         glance_count = 0
@@ -61,9 +69,10 @@ def simulate_attacks(attack, target, samples=100):
         results.append(this_level)
     return results
 
-def plot_attacks(attack, target, samples=100):
-    data = simulate_attacks(attack, target, samples=samples)
-    n, bins, patches = plot.hist(results, bins = CRIT + 1)
+def plot_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
+    data = simulate_attacks(attack, target, atk_levels=atk_levels, trg_levels=trg_levels,
+                            samples=samples)
+    n, bins, patches = plot.hist(data, bins = CRIT + 1)
     plot.xlabel("Hit Type")
     plot.ylabel("Frequency")
     plot.title("To hit " + attack['label'] + " -> " + target['label'] + " by level")
@@ -73,8 +82,10 @@ def plot_attacks(attack, target, samples=100):
         
 def main():
     hero_phys = mobs.hero(stats.MENTAL, stats.FINESSE)
+    hero_fin = mobs.hero(stats.MENTAL, stats.PHYSICAL)
     normal_phys = mobs.normal(stats.MENTAL, stats.FINESSE)
-    simulate_attacks(hero_phys, normal_phys, samples=1000)
+    low_level_run = range(1,20) + ([20] * 81)
+    plot_attacks(hero_fin, normal_phys, atk_levels=low_level_run, samples=1000)
 
 if __name__ == '__main__':
     main()
