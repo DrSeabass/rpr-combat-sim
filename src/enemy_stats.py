@@ -214,6 +214,9 @@ def normal(weak1, weak2):
 def weenie(weak1, weak2):
     if weak2 > weak1:
         return weenie(weak2, weak1)
+    if weak1 == weak2:
+        print "You can't double up on weenie weakness!"
+        return None
     base = god()
     # weak group
     if weak1 == PHYSICAL:
@@ -244,8 +247,8 @@ def weenie(weak1, weak2):
         (weak2 == PHYSICAL and weak1 == FINESSE)):
         base['intellect'] = math.trunc(0.25 * base['intellect'])
         base['spirit'] = math.trunc(0.25 * base['spirit'])
-    elif ((weak1 == PHYSICAL and weak2 == Mental) or
-          (weak2 == PHYSICAL and weak1 == Mental)):
+    elif ((weak1 == PHYSICAL and weak2 == MENTAL) or
+          (weak2 == PHYSICAL and weak1 == MENTAL)):
         base['dexterity'] = math.trunc(0.25 * base['dexterity'])
         base['speed'] = math.trunc(0.25 * base['speed'])
     elif ((weak1 == FINESSE and weak2 == MENTAL) or
@@ -256,8 +259,12 @@ def weenie(weak1, weak2):
     return base
         
 def main():
-    bs = god()
-    print bs
+    w1 = weenie(PHYSICAL, FINESSE)
+    w2 = weenie(PHYSICAL, MENTAL)
+    w3 = weenie(FINESSE, MENTAL)
+    print "Phys, Finnesse", w1
+    print "Phys, Mental", w2
+    print "Finesse, Mental", w3
 
 if __name__ == '__main__':
     main()
