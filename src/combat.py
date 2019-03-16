@@ -3,6 +3,7 @@ import random
 import matplotlib.pyplot as plot
 import make_stats as stats
 import enemy_stats as mobs
+import skill
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
@@ -44,6 +45,21 @@ def check_hit(attacker, target):
         else:
             return HIT
 
+def use_skill_spell(caster, skill):
+    # note that spell casting isn't contested by the target, but by the spell!
+    inte = caster['intellect']
+    spr = caster['spirit']
+    effective_level = skill['level'] + skill['difficulty_mod']
+    scales = skill['scales']
+    cost = skill.get_cost(skill, caster)
+    level_delta = caster['level'] - effective_level
+    # fizzle is based on level difference and how much of your AP you're trying to use
+    # half effect is level + stats, if the spell doesn't scale, a half effect fizzles
+    # full cast is level + stats
+    # power_cast is level + stats, base cost of spell vs effective cost of spell
+    # uncontrolled is entirely determined by how much AP you're trying to use
+    return None
+        
 def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
     results = []
     for level in range(1,100):
