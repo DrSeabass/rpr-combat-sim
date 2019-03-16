@@ -4,10 +4,18 @@ import matplotlib.pyplot as plot
 import make_stats as stats
 import enemy_stats as mobs
 
+## Attack attempt outcome
 MISS = 0   # whiff, no damage
 GLANCE = 1 # glancing blow, half or quarter damage
 HIT = 2    # solid hit, full damage
 CRIT = 3   # beyond decent hit, 1.5x damage?
+
+## Magic Attempt outcome
+FIZZLE = 0
+HALF_EFFECT = 1
+FULL_CAST = 2
+POWER_CAST = 3
+UNCONTROLLED = 4
 
 def fix_seed():
     random.seed(314159)
@@ -72,6 +80,7 @@ def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=1
 def plot_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
     data = simulate_attacks(attack, target, atk_levels=atk_levels, trg_levels=trg_levels,
                             samples=samples)
+    fix_seed()
     n, bins, patches = plot.hist(data, bins = CRIT + 1)
     plot.xlabel("Hit Type")
     plot.ylabel("Frequency")
@@ -84,8 +93,9 @@ def main():
     hero_phys = mobs.hero(stats.MENTAL, stats.FINESSE)
     hero_fin = mobs.hero(stats.MENTAL, stats.PHYSICAL)
     normal_phys = mobs.normal(stats.MENTAL, stats.FINESSE)
-    low_level_run = range(1,20) + ([20] * 81)
-    plot_attacks(hero_fin, normal_phys, atk_levels=low_level_run, samples=1000)
-
+    #low_level_run = range(1,20) + ([20] * 81)
+    #plot_attacks(hero_fin, normal_phys, atk_levels=low_level_run, samples=1000)
+    plot_attacks(hero_fin, normal_phys, samples=1000)
+    
 if __name__ == '__main__':
     main()
