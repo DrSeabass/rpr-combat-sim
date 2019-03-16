@@ -57,8 +57,7 @@ def simulate_attacks(attack, target, samples=100):
             elif val == CRIT:
                 crit_count += 1
             this_level.append(val)
-        
-        print level, ":\tmiss", miss_count, "glance", glance_count, "hit", hit_count, "crit", crit_count
+        print level, "\tmiss\t", miss_count, "\tglance\t", glance_count, "\thit\t", hit_count, "\tcrit\t", crit_count
         results.append(this_level)
     return results
 
