@@ -60,13 +60,16 @@ def simulate_attacks(attack, target, samples=100):
         
         print level, ":\tmiss", miss_count, "glance", glance_count, "hit", hit_count, "crit", crit_count
         results.append(this_level)
+    return results
+
+def plot_attacks(attack, target, samples=100):
+    data = simulate_attacks(attack, target, samples=samples)
     n, bins, patches = plot.hist(results, bins = CRIT + 1)
     plot.xlabel("Hit Type")
     plot.ylabel("Frequency")
     plot.title("To hit " + attack['label'] + " -> " + target['label'] + " by level")
     plot.grid(True)
     plot.show()
-    
         
         
 def main():
