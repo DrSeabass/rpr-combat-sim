@@ -42,14 +42,13 @@ def compute_max_ap(base):
     return baseVal + math.trunc(boost )
 
 def compute_evasion(base):
-    return base['speed'] + base['dexterity']
+    return (base['speed'] + base['dexterity'] / 2)
 
 def compute_physical_resist(base):
-    return base['toughness'] + base['spirit']
+    return (base['toughness'] + base['spirit'] / 2)
 
 def compute_magic_attunement(base):
-    return base['intellect'] + base['dexterity']
-
+    return (base['intellect'] + base['dexterity'] / 2)
 
 def compute_derived_stats(base):
     base['max_hp'] = compute_max_hp(base)
