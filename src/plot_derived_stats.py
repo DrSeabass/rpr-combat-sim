@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plotter
 
 import make_stats as stats
+import enemy_stats as mobs
 
 def points_derived_by_level(end_stats, derived):
     points = []
@@ -19,12 +20,12 @@ def plot_derived(stat_list, derived):
     plotter.show()
 
 if __name__ == '__main__':
-    god = stats.god()
-    minor = stats.minor_diety(stats.PHYSICAL)
-    demi_split_phys = stats.demigod(stats.MENTAL, stats.PHYSICAL)
-    hero_weak_phys = stats.hero(stats.PHYSICAL, stats.FINESSE)
-    tough_weak_phys = stats.tough(stats.PHYSICAL, stats.FINESSE)
-    normal_weak_phys = stats.normal(stats.PHYSICAL, stats.FINESSE)
-    weenie_weak_phys = stats.weenie(stats.PHYSICAL, stats.FINESSE)
+    god = mobs.god()
+    minor = mobs.minor_diety(stats.PHYSICAL)
+    demi_split_phys = mobs.demigod(stats.MENTAL, stats.PHYSICAL)
+    hero_weak_phys = mobs.hero(stats.PHYSICAL, stats.FINESSE)
+    tough_weak_phys = mobs.tough(stats.PHYSICAL, stats.FINESSE)
+    normal_weak_phys = mobs.normal(stats.PHYSICAL, stats.FINESSE)
+    weenie_weak_phys = mobs.weenie(stats.PHYSICAL, stats.FINESSE)
     plot_derived([god, minor, demi_split_phys, hero_weak_phys,
                   tough_weak_phys, normal_weak_phys, weenie_weak_phys], 'max_hp')
