@@ -30,7 +30,16 @@ def compute_max_hp(base):
     return base + math.trunc(half_rem * tgh_str_boost + half_rem * tgh_boost)
 
 def compute_max_ap(base):
-    return base['spirit'] + base['intellect'] + 90
+    spr = base['spirit']
+    inte = base['intellect']
+    lvl = base['level']
+    min_val = 10
+    max_val = 1000
+    baseVal = min_val + 3 * (lvl / 2) + (spr + inte) / 2
+    rem = max_val - baseVal
+    scale = 1 - 0.2 * (spr * inte) / (MAX_STAT * MAX_STAT) 
+    boost = rem * (1.0 - scale ** (lvl/5))
+    return baseVal + math.trunc(boost )
 
 def compute_evasion(base):
     return base['speed'] + base['dexterity']
