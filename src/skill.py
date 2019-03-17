@@ -37,7 +37,7 @@ def direct_damage_single_target_max():
         'cost' : stats.MAX_AP / 15,
         'scales' : True,
         'difficulty_mod' : 0,
-        'damage' : stats.MAX_HP / 15
+        'damage' : stats.MAX_HP / 5
     }
 
 def direct_damage_multi_target_max():
@@ -47,7 +47,7 @@ def direct_damage_multi_target_max():
         'cost' : stats.MAX_AP / 10,
         'scales' : True,
         'difficulty_mod' : 10,
-        'damage' : stats.MAX_HP / 15
+        'damage' : stats.MAX_HP / 10
     }
 
 def heal_single_target_max():
