@@ -187,8 +187,8 @@ def main():
     #low_level_run = range(1,20) + ([20] * 81)
     #plot_attacks(hero_fin, normal_phys, atk_levels=low_level_run, samples=1000)
     #plot_attacks(hero_fin, normal_phys, samples=1000)
-    #spell_10 = [10] * 100
-    plot_casts(hero_mnt, single_target_max)#,spell_levels = spell_10)
+    spell_10 = [50] * 100
+    plot_casts(hero_mnt, single_target_max, spell_levels = spell_10)
     
     
 if __name__ == '__main__':

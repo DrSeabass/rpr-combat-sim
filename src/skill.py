@@ -26,7 +26,8 @@ def scale_by_level(base, trgt_level):
         'level' : trgt_level,
         'cost' : math.trunc((1.0 * base['cost'] * trgt_level) / stats.MAX_LEVEL),
         'scales' : base['scales'],
-        'difficulty_mod' : base['difficulty_mod']
+        'difficulty_mod' : base['difficulty_mod'],
+        'damage' : 0
     }
 
 def direct_damage_single_target_max():
@@ -35,6 +36,36 @@ def direct_damage_single_target_max():
         'level' : stats.MAX_LEVEL,
         'cost' : stats.MAX_AP / 15,
         'scales' : True,
-        'difficulty_mod' : 0
+        'difficulty_mod' : 0,
+        'damage' : stats.MAX_HP / 15
     }
 
+def direct_damage_multi_target_max():
+    return {
+        'label' : "Direct Damage, Multi Target",
+        'level' : stats.MAX_LEVEL,
+        'cost' : stats.MAX_AP / 10,
+        'scales' : True,
+        'difficulty_mod' : 10,
+        'damage' : stats.MAX_HP / 15
+    }
+
+def heal_single_target_max():
+    return {
+        'label' : "Heal, Single Target",
+        'level' : stats.MAX_LEVEL,
+        'cost' : stats.MAX_AP / 15,
+        'scales' : True,
+        'difficulty_mod' : 0,
+        'damage' : -1 * (stats.MAX_HP / 5)
+    }
+
+def heal_multi_target_max():
+    return {
+        'label' : "Heal, Multi Target",
+        'level' : stats.MAX_LEVEL,
+        'cost' : stats.MAX_AP / 10,
+        'scales' : True,
+        'difficulty_mod' : 10,
+        'damage' : -1 * (stats.MAX_HP / 10)
+    }
