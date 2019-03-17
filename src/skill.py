@@ -1,4 +1,5 @@
 """ Represents a skill or spell"""
+import math
 import make_stats as stats
 
 
@@ -25,7 +26,7 @@ def scale_by_level(base, trgt_level):
         'level' : trgt_level,
         'cost' : math.trunc((1.0 * base['cost'] * trgt_level) / stats.MAX_LEVEL),
         'scales' : base['scales'],
-        'difficult_mod' : base['difficulty_mod']
+        'difficulty_mod' : base['difficulty_mod']
     }
 
 def direct_damage_single_target_max():
