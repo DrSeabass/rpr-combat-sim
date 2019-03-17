@@ -45,6 +45,39 @@ def check_hit(attacker, target):
         else:
             return HIT
 
+def do_atk_dam(attacker, target, weapon_min_dam, weapon_max_dam, hit_type):
+    phys_resist = target['physical_resist']
+    strength = attacker['strength']
+    effective_resist = (1.0 *  phys_restist) / strtength
+    damage_boost = 1 + ((1.0 * strength) / max_stat)
+    damage_roll = random.randint(weapon_min_dam, weapon_max_dam)
+    damage = damage_boost * (damage_roll - effective_resist)
+    return math.trunc(damage_boost)
+
+def do_spell_dam(caster, targets, spell, cast_type):
+    caster_attune = caster['magic_attunement']
+    caster_boost = 1 + (1.0 * caster_attune) / stats.MAX_STAT
+    if cast_type = FIZZLE:
+        return None
+    elif cast_type = UNCONTROLLED:
+        return None
+    else:
+        damages = []
+        base_dam = spell['damage']
+        # setup damage base on caster type
+        if cast_type == HALF_EFFECT:
+            base_dam *= 0.5
+        elif cast_type == POWER:
+            base_dam *= 2
+        for target in targets:
+            target_attune = target['magic_attunement']
+            delta_attune = 1 + ((1.0 * (caster_attune - target_attune)) / stats.MAX_STAT)
+            scaled_dam = base_dam * delta_attune
+            scale = random.randint(9,11)
+            damage = math.trunc((scale * scaled_dam) / 10)
+            damages.append(damage)
+    return damages
+
 def use_skill_spell(caster, spell):
     # note that spell casting isn't contested by the target, but by the spell!
     inte = caster['intellect']
