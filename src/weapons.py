@@ -231,6 +231,14 @@ def max_quarterstaff():
         'max_dam' : MAX_WEAPON_DAMAGE / 2
     }
 
+######### Weapon Groupings
+tight_variance_slash = [max_glaive(), max_broadsword(), max_saber()]
+wide_variance_slash = [ max_bastard(), max_longsword(), max_basket_hilt() ]
+
+heavy_hits_slash = [ max_bastard(), max_glaive()]
+medium_hits_slash = [ max_broadsword(), max_longsword()]
+light_hits_slash = [ max_saber(), max_basket_hilt() ]
+
 ########## Testing
 
 def get_swings(weapon, weapon_levels=None, samples=100):
@@ -277,7 +285,7 @@ def plot_swings(weapon_list, weapon_levels=None, samples=100):
 
     
 def main():
-    plot_swings([max_bastard(), max_glaive()], samples=100)
+    plot_swings(wide_variance_slash, samples=100)
 
 if __name__ == '__main__':
     main()
