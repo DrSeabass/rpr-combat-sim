@@ -1,5 +1,7 @@
 """ Representation of weapons"""
 import math
+import random
+import matplotlib.pyplot as plot
 
 ## Damage Types
 BLUNT = 0
@@ -14,6 +16,9 @@ MIN_WEAPON_SPEED=1
 ## Weapon Damage Range
 MAX_WEAPON_DAMAGE=500
 MIN_WEAPON_DAMAGE=10
+
+def fix_seed():
+    random.seed(314159)
 
 def base():
     return {
@@ -226,4 +231,53 @@ def max_quarterstaff():
         'max_dam' : MAX_WEAPON_DAMAGE / 2
     }
 
+########## Testing
 
+def get_swings(weapon, weapon_levels=None, samples=100):
+    damages = []
+    averages = []
+    mins = []
+    maxs = []
+    levels = None
+    if weapon_levels is None:
+        levels = range(1,100)
+    else:
+        levels = weapon_levels
+    for level in levels:
+        weapon_at_level = scale_weapon(weapon, level)
+        mins.append(weapon_at_level['min_dam'])
+        maxs.append(weapon_at_level['max_dam'])
+        this_level = []
+        sum = 0
+        for sample in range(0, samples):
+            this_dam = random.randint(weapon_at_level['min_dam'], weapon_at_level['max_dam'])
+            sum += this_dam
+            this_level.append(this_dam)
+        averages.append((1.0 * sum) / samples)
+        damages.append(this_level)
+    return { 'damages' : damages,
+             'average' : averages,
+             'largest' : maxs,
+             'smallest' : mins
+             }
+    
+
+def plot_swings(weapon_list, weapon_levels=None, samples=100):
+    for weapon in weapon_list:
+        raw = get_swings(weapon, weapon_levels=weapon_levels, samples=samples)
+        plot.plot(raw['average'], label=weapon['label'] + " Avg")
+        plot.plot(raw['largest'], label=weapon['label'] + " Max")
+        plot.plot(raw['smallest'], label=weapon['label'] + " Min")
+    plot.xlabel("Level")
+    plot.ylabel("Damage")
+    plot.legend()
+    plot.title(weapon['label'] + " damage by level")
+    plot.grid(True)
+    plot.show()
+
+    
+def main():
+    plot_swings([max_bastard(), max_glaive()], samples=100)
+
+if __name__ == '__main__':
+    main()
