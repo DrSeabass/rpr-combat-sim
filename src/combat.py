@@ -57,9 +57,9 @@ def do_atk_dam(attacker, target, weapon_min_dam, weapon_max_dam, hit_type):
 def do_spell_dam(caster, targets, spell, cast_type):
     caster_attune = caster['magic_attunement']
     caster_boost = 1 + (1.0 * caster_attune) / stats.MAX_STAT
-    if cast_type = FIZZLE:
+    if cast_type == FIZZLE:
         return None
-    elif cast_type = UNCONTROLLED:
+    elif cast_type == UNCONTROLLED:
         return None
     else:
         damages = []
@@ -185,7 +185,10 @@ def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=1
             elif val == CRIT:
                 crit_count += 1
             this_level.append(val)
-        print level, "\tmiss\t", miss_count, "\tglance\t", glance_count, "\thit\t", hit_count, "\tcrit\t", crit_count
+        print level, "\tmiss\t", miss_count,
+                     "\tglance\t", glance_count,
+                     "\thit\t", hit_count,
+                     "\tcrit\t", crit_count
         results.append(this_level)
     return results
 

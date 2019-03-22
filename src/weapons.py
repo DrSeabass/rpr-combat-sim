@@ -122,7 +122,7 @@ def max_longsword():
         'label' : 'Longsword',
         'speed' : MED_WEAPON_SPEED,
         'dam_type' : SLASH,
-        'min_dam' : MIN_WEAPON_DAMAGE,
+        'min_dam' : MAX_WEAPON_DAMAGE / 8, #MIN_WEAPON_DAMAGE,
         'max_dam' : MAX_WEAPON_DAMAGE / 3
     }
 
@@ -185,7 +185,7 @@ def max_bastard():
         'label' : 'BastardSword',
         'speed' : MIN_WEAPON_SPEED,
         'dam_type' : SLASH,
-        'min_dam' : MIN_WEAPON_DAMAGE,
+        'min_dam' : MAX_WEAPON_DAMAGE / 8, #MIN_WEAPON_DAMAGE,
         'max_dam' : MAX_WEAPON_DAMAGE
     }
 
