@@ -8,9 +8,10 @@ BLUNT = 0
 SLASH = 1
 PIERCE = 2
 
+## Swing cost is then weapon cost / x 
 ## Weapon Speed Range
-MAX_WEAPON_SPEED=10
-MED_WEAPON_SPEED=5
+MAX_WEAPON_SPEED=3
+MED_WEAPON_SPEED=2
 MIN_WEAPON_SPEED=1
 
 ## Weapon Damage Range
