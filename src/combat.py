@@ -199,13 +199,47 @@ def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=1
         print level, "\tmiss\t", miss_count, "\tglance\t", glance_count, "\thit\t", hit_count,"\tcrit\t", crit_count
         results.append(this_level)
     return results    
-        
+
+def setup_combat_order(party, enemies):
+    order_scores = []
+    # roll for the party
+    for ind in range(0,len(party)):
+        pmem = party[ind]
+        rec = { 'side' : 'party',
+                'index' : ind,
+                'score' : get_combat_action_score(pmem) }
+        order_scores.append(rec)
+    # roll for the enemy
+    for ind in range(0,len(enemies)):
+        pmem = enemies[ind]
+        rec = { 'side' : 'enemies',
+                'index' : ind,
+                'score' : get_combat_action_score(pmem) }
+        order_scores.append(rec)
+    order_scores.sort(key = lambda el : el['score'])
+    order_scores.reverse()
+    return order_scores
+
+def run_combat_phase(party, enemies):
+    order = setup_combat_order(party,enemies)
+    repeat = False
+    while True:
+        repeat = False
+        for step in order:
+            if step['score'] > 0:
+                if step['side'] == 'party':
+                    print "Party: ", party[step['index']]['label']
+                    step['score'] -= 10
+                    repeat = True
+        if not repeat:
+            return
+
 def main():
     hero_phys = mobs.hero(stats.MENTAL, stats.FINESSE)
     hero_fin = mobs.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = mobs.hero(stats.FINESSE, stats.PHYSICAL)
-    party = [hero_phys, hero_fin, hero_mnt]
-
+    party = [hero_fin, hero_phys, hero_mnt]
+    run_combat_phase(stats.party_of_level(party, 75), [])
     
     
 if __name__ == '__main__':

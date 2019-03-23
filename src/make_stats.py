@@ -74,3 +74,8 @@ def stats_of_level(stats, level):
     compute_derived_stats(ret_val)
     return ret_val
     
+def party_of_level(party, level):
+    ret_val = []
+    for pmem in party:
+        ret_val.append(stats_of_level(pmem, level))
+    return ret_val
