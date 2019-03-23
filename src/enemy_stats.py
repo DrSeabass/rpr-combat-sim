@@ -156,8 +156,8 @@ def decent(half_one, half_two):
         (half_two == PHYSICAL and half_one == FINESSE)):
         base['intellect'] = math.trunc(0.75 * base['intellect'])
         base['spirit'] = math.trunc(0.75 * base['spirit'])
-    elif ((half_one == PHYSICAL and half_two == Mental) or
-          (half_two == PHYSICAL and half_one == Mental)):
+    elif ((half_one == PHYSICAL and half_two == MENTAL) or
+          (half_two == PHYSICAL and half_one == MENTAL)):
         base['dexterity'] = math.trunc(0.75 * base['dexterity'])
         base['speed'] = math.trunc(0.75 * base['speed'])
     elif ((half_one == FINESSE and half_two == MENTAL) or
@@ -200,8 +200,8 @@ def normal(weak1, weak2):
         (weak2 == PHYSICAL and weak1 == FINESSE)):
         base['intellect'] = math.trunc(0.5 * base['intellect'])
         base['spirit'] = math.trunc(0.5 * base['spirit'])
-    elif ((weak1 == PHYSICAL and weak2 == Mental) or
-          (weak2 == PHYSICAL and weak1 == Mental)):
+    elif ((weak1 == PHYSICAL and weak2 == MENTAL) or
+          (weak2 == PHYSICAL and weak1 == MENTAL)):
         base['dexterity'] = math.trunc(0.5 * base['dexterity'])
         base['speed'] = math.trunc(0.5 * base['speed'])
     elif ((weak1 == FINESSE and weak2 == MENTAL) or
