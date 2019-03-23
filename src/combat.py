@@ -18,6 +18,9 @@ FULL_CAST = 2    # Full effect, AP Consumed
 POWER_CAST = 3   # Double Effect, AP Consumed
 UNCONTROLLED = 4 # Quadruple Effect, Targets Multiple at Random, 2x AP consumed
 
+## Other
+DEFAULT_ACTION_COST = 10
+
 def fix_seed():
     random.seed(314159)
 
@@ -229,7 +232,7 @@ def run_combat_phase(party, enemies):
             if step['score'] > 0:
                 if step['side'] == 'party':
                     print "Party: ", party[step['index']]['label']
-                    step['score'] -= 10
+                    step['score'] -= DEFAULT_ACTION_COST
                     repeat = True
         if not repeat:
             return
