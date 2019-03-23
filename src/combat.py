@@ -2,7 +2,8 @@
 import random
 import matplotlib.pyplot as plot
 import make_stats as stats
-import enemy_stats as mobs
+import enemy_stats as chars
+import enemy_groups as mobs
 import skill
 
 ## Attack attempt outcome
@@ -225,6 +226,7 @@ def setup_combat_order(party, enemies):
 
 def run_combat_phase(party, enemies):
     order = setup_combat_order(party,enemies)
+    print order
     repeat = False
     while True:
         repeat = False
@@ -234,15 +236,26 @@ def run_combat_phase(party, enemies):
                     print "Party: ", party[step['index']]['label']
                     step['score'] -= DEFAULT_ACTION_COST
                     repeat = True
+                else:
+                    print "Enemy: ", enemies[step['index']]['label']
+                    step['score'] -= DEFAULT_ACTION_COST
+                    repeat = True
+                    
         if not repeat:
             return
 
+def run_combat(party, enemies, at_level = None):
+    if at_level:
+        party = stats.party_of_level(party, at_level)
+        enemies = stats.party_of_level(enemies, at_level)
+    run_combat_phase(party, enemies)
+
 def main():
-    hero_phys = mobs.hero(stats.MENTAL, stats.FINESSE)
-    hero_fin = mobs.hero(stats.MENTAL, stats.PHYSICAL)
-    hero_mnt = mobs.hero(stats.FINESSE, stats.PHYSICAL)
+    hero_phys = chars.hero(stats.MENTAL, stats.FINESSE)
+    hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
+    hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    run_combat_phase(stats.party_of_level(party, 75), [])
+    run_combat(party, mobs.tough_decent, at_level = 75)
     
     
 if __name__ == '__main__':
