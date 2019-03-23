@@ -224,20 +224,33 @@ def setup_combat_order(party, enemies):
     order_scores.reverse()
     return order_scores
 
+def do_action(actor, targets, teammates, affil_string):
+    avail_actions = [('HEAL', 0.1), ('SKILL-ATTACK', 0.2), ('PHYS-ATTACK', 0.7)]
+    action_choice = random.random()
+    selected = None
+    for (action_nm, action_score) in avail_actions:
+        if selected is None and action_score > action_choice:
+            selected = action_nm
+        else:
+            action_choice -= action_score
+    print affil_string, actor['label'], "takes action", selected
+            
+
 def run_combat_phase(party, enemies):
     order = setup_combat_order(party,enemies)
-    print order
     repeat = False
     while True:
         repeat = False
         for step in order:
             if step['score'] > 0:
                 if step['side'] == 'party':
-                    print "Party: ", party[step['index']]['label']
+                    actor = party[step['index']]
+                    do_action(actor, enemies, party, "Party")
                     step['score'] -= DEFAULT_ACTION_COST
                     repeat = True
                 else:
-                    print "Enemy: ", enemies[step['index']]['label']
+                    actor = enemies[step['index']]
+                    do_action(actor, party, enemies, "Enemy")
                     step['score'] -= DEFAULT_ACTION_COST
                     repeat = True
                     
