@@ -234,7 +234,18 @@ def do_action(actor, targets, teammates, affil_string):
         else:
             action_choice -= action_score
     print affil_string, actor['label'], "takes action", selected
+    return selected
             
+
+def check_alive(char):
+    return char['current_hp'] > 0
+        
+def check_dead(char_list):
+    for char in char_list:
+        #some character is alive
+        if check_alive(char):
+            return False
+    return True
 
 def run_combat_phase(party, enemies):
     order = setup_combat_order(party,enemies)
@@ -245,30 +256,59 @@ def run_combat_phase(party, enemies):
             if step['score'] > 0:
                 if step['side'] == 'party':
                     actor = party[step['index']]
-                    do_action(actor, enemies, party, "Party")
-                    step['score'] -= DEFAULT_ACTION_COST
-                    repeat = True
+                    if not check_alive(actor):
+                        step['score'] = 0
+                    else:
+                        do_action(actor, enemies, party, "Party")
+                        step['score'] -= DEFAULT_ACTION_COST
+                        repeat = True
                 else:
                     actor = enemies[step['index']]
-                    do_action(actor, party, enemies, "Enemy")
-                    step['score'] -= DEFAULT_ACTION_COST
-                    repeat = True
-                    
+                    if not check_alive(actor):
+                        step['score'] = 0
+                    else:
+                        do_action(actor, party, enemies, "Enemy")
+                        step['score'] -= DEFAULT_ACTION_COST
+                        repeat = True
         if not repeat:
             return
-
-def run_combat(party, enemies, at_level = None):
+        
+def run_combat(party, enemies, at_level = None):    
     if at_level:
         party = stats.party_of_level(party, at_level)
         enemies = stats.party_of_level(enemies, at_level)
-    run_combat_phase(party, enemies)
+    initial_ap = 0
+    initial_hp = 0
+    for pmem in party:
+        initial_ap += pmem['current_ap']
+        initial_hp += pmem['current_hp']
+    party_dead = False
+    enemy_dead = False
+    turn = -1
+    while not (party_dead or enemy_dead) and turn < 10:
+        turn += 1
+        print "Starting turn", turn 
+        run_combat_phase(party, enemies)
+        party_dead = check_dead(party)
+        enemy_dead = check_dead(enemies)
+
+    final_ap = 0
+    final_hp = 0
+    for pmem in party:
+        final_ap += pmem['current_ap']
+        final_hp += pmem['current_hp']
+    return { 'party_survives': not party_dead,
+             'hp_cost' : initial_hp - final_hp,
+             'ap_cost' : initial_ap - final_ap,
+             'turns' : turn }
 
 def main():
     hero_phys = chars.hero(stats.MENTAL, stats.FINESSE)
     hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    run_combat(party, mobs.tough_decent, at_level = 75)
+    costs = run_combat(party, mobs.tough_decent, at_level = 75)
+    print "Final Combat Expense", costs
     
     
 if __name__ == '__main__':

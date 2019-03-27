@@ -56,6 +56,8 @@ def compute_magic_attunement(base):
 def compute_derived_stats(base):
     base['max_hp'] = compute_max_hp(base)
     base['max_ap'] = compute_max_ap(base)
+    base['current_hp'] = base['max_hp']
+    base['current_ap'] = base['max_ap']
     base['evasion'] = compute_evasion(base)
     base['physical_resist'] = compute_physical_resist(base)
     base['magic_attunement'] = compute_magic_attunement(base)
