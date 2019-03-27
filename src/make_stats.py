@@ -18,6 +18,9 @@ def base_stats():
         'speed' : 0,
         'intellect' : 0,
         'spirit' : 0,
+        'HEAL' : None,
+        'SKILL-ATTACK' : None,
+        'PHYS-ATTACK' : None
     }
 
 def compute_max_hp(base):
@@ -61,23 +64,3 @@ def compute_derived_stats(base):
     base['evasion'] = compute_evasion(base)
     base['physical_resist'] = compute_physical_resist(base)
     base['magic_attunement'] = compute_magic_attunement(base)
-
-def stats_of_level(stats, level):
-    ret_val = {
-        'label' : stats['label'],
-        'level' : level,
-        'strength' : (stats['strength'] * level) / 100,
-        'toughness' : (stats['toughness'] * level) / 100,
-        'dexterity' : (stats['dexterity'] * level) / 100,
-        'speed' : (stats['speed'] * level) / 100,
-        'intellect' : (stats['intellect'] * level) / 100,
-        'spirit' : (stats['spirit'] * level) / 100
-    }
-    compute_derived_stats(ret_val)
-    return ret_val
-    
-def party_of_level(party, level):
-    ret_val = []
-    for pmem in party:
-        ret_val.append(stats_of_level(pmem, level))
-    return ret_val

@@ -6,7 +6,7 @@ import enemy_stats as mobs
 def points_derived_by_level(end_stats, derived):
     points = []
     for i in range(1, 101):
-        points.append(stats.stats_of_level(end_stats, i)[derived])
+        points.append(mobs.stats_of_level(end_stats, i)[derived])
     return points
 
 def plot_derived(stat_list, derived):

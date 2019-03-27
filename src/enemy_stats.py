@@ -1,4 +1,6 @@
-from make_stats import * 
+from make_stats import *
+import skill
+import weapons
 
 def god():
     stats = { 'label' : "God",
@@ -8,7 +10,11 @@ def god():
               'dexterity': MAX_STAT,
               'speed' : MAX_STAT,
               'intellect' : MAX_STAT,
-              'spirit' : MAX_STAT }
+              'spirit' : MAX_STAT,
+              'HEAL' : skill.heal_single_target_max(),
+              'SKILL-ATTACK' : skill.direct_damage_single_target_max(),
+              'PHYS-ATTACK' : weapons.max_bastard()
+    }
     compute_derived_stats(stats)
     return stats
 
@@ -257,7 +263,30 @@ def weenie(weak1, weak2):
         base['toughness'] = math.trunc(0.25 * base['toughness'])
     compute_derived_stats(base)
     return base
-        
+
+def stats_of_level(stats, level):
+    ret_val = {
+        'label' : stats['label'],
+        'level' : level,
+        'strength' : (stats['strength'] * level) / 100,
+        'toughness' : (stats['toughness'] * level) / 100,
+        'dexterity' : (stats['dexterity'] * level) / 100,
+        'speed' : (stats['speed'] * level) / 100,
+        'intellect' : (stats['intellect'] * level) / 100,
+        'spirit' : (stats['spirit'] * level) / 100,
+        'HEAL' : skill.scale_by_level(stats['HEAL'], level),
+        'SKILL-ATTACK' : skill.scale_by_level(stats['SKILL-ATTACK'], level),
+        'PHYS-ATTACK' : weapons.scale_weapon(stats['PHYS-ATTACK'], level)
+    }
+    compute_derived_stats(ret_val)
+    return ret_val
+    
+def party_of_level(party, level):
+    ret_val = []
+    for pmem in party:
+        ret_val.append(stats_of_level(pmem, level))
+    return ret_val
+
 def main():
     w1 = weenie(PHYSICAL, FINESSE)
     w2 = weenie(PHYSICAL, MENTAL)

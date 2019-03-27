@@ -29,7 +29,7 @@ def get_action_scores(character, levels = None, samples = 100):
         levels = range(1,100)
     for level in levels:
         this_level = []
-        character_at_level = stats.stats_of_level(character, level)
+        character_at_level = enemy_stats.stats_of_level(character, level)
         for i in range(0,samples):
             this_level.append(get_combat_action_score(character_at_level))
         ret_val.append(this_level)

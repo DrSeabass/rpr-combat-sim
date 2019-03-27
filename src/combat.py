@@ -144,9 +144,9 @@ def simulate_cast(caster, spell, cst_levels=None, spell_levels=None, samples=100
         cst_level = None
         spell_level = None
         if cst_levels is None:
-            cst_level = stats.stats_of_level(caster, level)
+            cst_level = mobs.stats_of_level(caster, level)
         else:
-            cst_level = stats.scale_by_level(caster, cst_levels[level])
+            cst_level = skill.scale_by_level(caster, cst_levels[level])
         if spell_levels is None:
             spell_level = skill.scale_by_level(spell, level)
         else:
@@ -180,13 +180,13 @@ def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=1
         atk_level = None
         trg_level = None
         if atk_levels is None:
-            atk_level = stats.stats_of_level(attack, level)
+            atk_level = mobs.stats_of_level(attack, level)
         else:
-            atk_level = stats.stats_of_level(attack, atk_levels[level])
+            atk_level = mobs.stats_of_level(attack, atk_levels[level])
         if trg_levels is None:
-            trg_level = stats.stats_of_level(target, level)
+            trg_level = mobs.stats_of_level(target, level)
         else:
-            trg_level = stats.stats_of_level(target, trg_levels[level])
+            trg_level = mobs.stats_of_level(target, trg_levels[level])
         crit_count = 0
         hit_count = 0
         glance_count = 0
@@ -298,8 +298,8 @@ def reset_party(party):
         
 def run_combat(party, enemies, at_level = None, max_turns = 10):    
     if at_level:
-        party = stats.party_of_level(party, at_level)
-        enemies = stats.party_of_level(enemies, at_level)
+        party = mobs.party_of_level(party, at_level)
+        enemies = mobs.party_of_level(enemies, at_level)
     initial_ap = 0
     initial_hp = 0
     for pmem in party:
