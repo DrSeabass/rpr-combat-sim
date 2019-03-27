@@ -6,6 +6,9 @@ import enemy_stats as chars
 import enemy_groups as mobs
 import skill
 
+## PRINTF DEBUGGING
+LOUD = True
+
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
 GLANCE = 1 # glancing blow, half or quarter damage
@@ -110,7 +113,6 @@ def use_skill_spell(caster, spell):
     power_thresh = 0.8 *  effective_level
     uncontrolled_thresh = 0.98 * spell['level']
     cost_fraction =  (1.0 * cost) / caster['max_ap']
-    #print effective_level, level_rand, normal_thresh
     if (level_rand * mind_scale) > uncontrolled_thresh:
         if random.random() < cost_fraction:
             return UNCONTROLLED
@@ -233,7 +235,8 @@ def do_action(actor, targets, teammates, affil_string):
             selected = action_nm
         else:
             action_choice -= action_score
-    print affil_string, actor['label'], "takes action", selected
+    if LOUD:
+        print affil_string, actor['label'], "takes action", selected
     return selected
             
 
@@ -295,7 +298,8 @@ def run_combat(party, enemies, at_level = None, max_turns = 10):
     turn = -1
     while not (party_dead or enemy_dead) and turn < max_turns:
         turn += 1
-        print "Starting turn", turn 
+        if LOUD:
+            print "Starting turn", turn 
         run_combat_phase(party, enemies)
         party_dead = check_dead(party)
         enemy_dead = check_dead(enemies)
@@ -309,6 +313,15 @@ def run_combat(party, enemies, at_level = None, max_turns = 10):
              'hp_cost' : initial_hp - final_hp,
              'ap_cost' : initial_ap - final_ap,
              'turns' : turn }
+
+def sample_combat(party, enemies, samples, at_level=None):
+    data = []
+    while samples > 0:
+        reset_party(party)
+        reset_party(enemies)
+        data.append(run_combat(party, enemies, at_level=at_level))
+        samples -= 1
+    return data
 
 def main():
     hero_phys = chars.hero(stats.MENTAL, stats.FINESSE)
