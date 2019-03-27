@@ -312,7 +312,7 @@ def reset_party(party):
     for mem in party:
         reset_char(mem)
         
-def run_combat(party, enemies, at_level = None, max_turns = 10):    
+def run_combat(party, enemies, at_level = None, max_turns = 100):    
     if at_level:
         party = mobs.party_of_level(party, at_level)
         enemies = mobs.party_of_level(enemies, at_level)
@@ -342,7 +342,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 10):
              'ap_cost' : initial_ap - final_ap,
              'turns' : turn }
 
-def sample_combat(party, enemies, samples=100, at_level=None):
+def sample_combat(party, enemies, samples=1, at_level=None):
     data = []
     while samples > 0:
         reset_party(party)
