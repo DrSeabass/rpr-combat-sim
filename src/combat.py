@@ -7,7 +7,7 @@ import enemy_groups as mobs
 import skill
 
 ## PRINTF DEBUGGING
-LOUD = True
+LOUD = False
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
@@ -237,6 +237,18 @@ def do_action(actor, targets, teammates, affil_string):
             action_choice -= action_score
     if LOUD:
         print affil_string, actor['label'], "takes action", selected
+    if selected == 'HEAL':
+        target = random.choice(teammates)
+        # what's the spell?
+    elif selected == 'SKILL-ATTACK':
+        target = random.choice(targets)
+        # what's the spell?
+        #cast_type = use_skill_spell(actor, spell)
+    elif selected == 'PHYS-ATTACK':
+        target = random.choice(targets)
+        hit_type = check_hit(actor, target)
+        # what's the weapon?
+        
     return selected
             
 
@@ -314,7 +326,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 10):
              'ap_cost' : initial_ap - final_ap,
              'turns' : turn }
 
-def sample_combat(party, enemies, samples, at_level=None):
+def sample_combat(party, enemies, samples=100, at_level=None):
     data = []
     while samples > 0:
         reset_party(party)
@@ -328,7 +340,7 @@ def main():
     hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    costs = run_combat(party, mobs.tough_decent, at_level = 75)
+    costs = sample_combat(party, mobs.tough_decent, at_level = 75)
     print "Final Combat Expense", costs
     
     
