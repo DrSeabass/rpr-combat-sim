@@ -272,8 +272,16 @@ def run_combat_phase(party, enemies):
                         repeat = True
         if not repeat:
             return
+
+def reset_char(char):
+    char['current_hp'] = char['max_hp']
+    char['current_ap'] = char['max_ap']
+
+def reset_party(party):
+    for mem in party:
+        reset_char(mem)
         
-def run_combat(party, enemies, at_level = None):    
+def run_combat(party, enemies, at_level = None, max_turns = 10):    
     if at_level:
         party = stats.party_of_level(party, at_level)
         enemies = stats.party_of_level(enemies, at_level)
@@ -285,7 +293,7 @@ def run_combat(party, enemies, at_level = None):
     party_dead = False
     enemy_dead = False
     turn = -1
-    while not (party_dead or enemy_dead) and turn < 10:
+    while not (party_dead or enemy_dead) and turn < max_turns:
         turn += 1
         print "Starting turn", turn 
         run_combat_phase(party, enemies)
