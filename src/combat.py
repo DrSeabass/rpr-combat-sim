@@ -1,4 +1,5 @@
 """ Try to simulate combat for rpr"""
+import math
 import random
 import matplotlib.pyplot as plot
 import make_stats as stats
@@ -66,8 +67,8 @@ def check_hit(attacker, target):
 def do_atk_dam(attacker, target, weapon_min_dam, weapon_max_dam, hit_type):
     phys_resist = target['physical_resist']
     strength = attacker['strength']
-    effective_resist = (1.0 *  phys_restist) / strtength
-    damage_boost = 1 + ((1.0 * strength) / max_stat)
+    effective_resist = (1.0 *  phys_resist) / strength
+    damage_boost = 1 + ((1.0 * strength) / stats.MAX_STAT)
     damage_roll = random.randint(weapon_min_dam, weapon_max_dam)
     damage = damage_boost * (damage_roll - effective_resist)
     return math.trunc(damage_boost)
@@ -76,16 +77,17 @@ def do_spell_dam(caster, targets, spell, cast_type):
     caster_attune = caster['magic_attunement']
     caster_boost = 1 + (1.0 * caster_attune) / stats.MAX_STAT
     if cast_type == FIZZLE:
-        return None
+        return [0]
     elif cast_type == UNCONTROLLED:
-        return None
+        #TODO handle uncontrolled damage
+        return [0]
     else:
         damages = []
         base_dam = spell['damage']
         # setup damage base on caster type
         if cast_type == HALF_EFFECT:
             base_dam *= 0.5
-        elif cast_type == POWER:
+        elif cast_type == POWER_CAST:
             base_dam *= 2
         for target in targets:
             target_attune = target['magic_attunement']
@@ -238,16 +240,30 @@ def do_action(actor, targets, teammates, affil_string):
     if LOUD:
         print affil_string, actor['label'], "takes action", selected
     if selected == 'HEAL':
-        target = random.choice(teammates)
-        # what's the spell?
+        trgs = [random.choice(teammates)]
+        spell = actor['HEAL']
+        cast_type = use_skill_spell(actor, spell)
+        # TODO - Where do I subtract out AP from actor?
+        damages = do_spell_dam(actor, trgs, spell, cast_type)
+        for ind in range(0,len(trgs)):
+            trgs[ind]['current_hp'] -= damages[ind]
     elif selected == 'SKILL-ATTACK':
-        target = random.choice(targets)
-        # what's the spell?
-        #cast_type = use_skill_spell(actor, spell)
+        trgs = [random.choice(targets)]
+        spell = actor['SKILL-ATTACK']
+        cast_type = use_skill_spell(actor, spell)
+        # TODO - Where do I subtract out AP from actor?
+        damages = do_spell_dam(actor, trgs, spell, cast_type)
+        for ind in range(0,len(trgs)):
+            trgs[ind]['current_hp'] -= damages[ind]
+            
     elif selected == 'PHYS-ATTACK':
         target = random.choice(targets)
         hit_type = check_hit(actor, target)
-        # what's the weapon?
+        weapon = target['PHYS-ATTACK']
+        dam = do_atk_dam(actor, target,
+                         weapon['min_dam'], weapon['max_dam'],
+                         hit_type)
+        target['current_hp'] -= dam
         
     return selected
             
