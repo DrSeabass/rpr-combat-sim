@@ -1,4 +1,5 @@
 from combat import *
+import enemy_stats
 
 def plot_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
     data = simulate_attacks(attack, target, atk_levels=atk_levels, trg_levels=trg_levels,
