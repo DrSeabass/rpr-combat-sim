@@ -8,7 +8,7 @@ import enemy_groups as mobs
 import skill
 
 ## PRINTF DEBUGGING
-LOUD = True
+LOUD = False
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
@@ -76,27 +76,25 @@ def do_atk_dam(attacker, target, weapon_min_dam, weapon_max_dam, hit_type):
 def do_spell_dam(caster, targets, spell, cast_type):
     caster_attune = caster['magic_attunement']
     caster_boost = 1 + (1.0 * caster_attune) / stats.MAX_STAT
+    damages = []
+    base_dam = spell['damage']
     if cast_type == FIZZLE:
         return [0]
-    elif cast_type == UNCONTROLLED:
-        #TODO handle uncontrolled damage
-        print "Uncontrolled cast, no damage at the moment"
-        return [0]
-    else:
-        damages = []
-        base_dam = spell['damage']
-        # setup damage base on caster type
-        if cast_type == HALF_EFFECT:
-            base_dam *= 0.5
-        elif cast_type == POWER_CAST:
-            base_dam *= 2
-        for target in targets:
-            target_attune = target['magic_attunement']
-            delta_attune = 1 + ((1.0 * (caster_attune - target_attune)) / stats.MAX_STAT)
-            scaled_dam = base_dam * delta_attune
-            scale = random.randint(9,11)
-            damage = math.trunc((scale * scaled_dam) / 10)
-            damages.append(damage)
+    if cast_type == UNCONTROLLED:
+        base_dam *= 4
+        caster['current_hp'] - base_dam
+    # setup damage base on caster type
+    elif cast_type == HALF_EFFECT:
+        base_dam *= 0.5
+    elif cast_type == POWER_CAST:
+        base_dam *= 2
+    for target in targets:
+        target_attune = target['magic_attunement']
+        delta_attune = 1 + ((1.0 * (caster_attune - target_attune)) / stats.MAX_STAT)
+        scaled_dam = base_dam * delta_attune
+        scale = random.randint(9,11)
+        damage = math.trunc((scale * scaled_dam) / 10)
+        damages.append(damage)
     return damages
 
 def use_skill_spell(caster, spell):
@@ -364,7 +362,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
              'ap_cost' : initial_ap - final_ap,
              'turns' : turn }
 
-def sample_combat(party, enemies, samples=1, at_level=None):
+def sample_combat(party, enemies, samples=500, at_level=None):
     data = []
     while samples > 0:
         reset_party(party)

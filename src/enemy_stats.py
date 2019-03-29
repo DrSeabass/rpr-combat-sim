@@ -268,13 +268,13 @@ def stats_of_level(stats, level):
     ret_val = {
         'label' : stats['label'],
         'level' : level,
-        'strength' : (stats['strength'] * level) / 100,
-        'toughness' : (stats['toughness'] * level) / 100,
-        'dexterity' : (stats['dexterity'] * level) / 100,
-        'speed' : (stats['speed'] * level) / 100,
-        'intellect' : (stats['intellect'] * level) / 100,
-        'spirit' : (stats['spirit'] * level) / 100,
-        'HEAL' : skill.scale_by_level(stats['HEAL'], level),
+        'strength' : max(1, (stats['strength'] * level) / 100),
+        'toughness' : max(1,(stats['toughness'] * level) / 100),
+        'dexterity' : max(1,(stats['dexterity'] * level) / 100),
+        'speed' : max(1, (stats['speed'] * level) / 100),
+        'intellect' : max(1, (stats['intellect'] * level) / 100),
+        'spirit' : max(1,(stats['spirit'] * level) / 100),
+        'HEAL' : max(1,skill.scale_by_level(stats['HEAL'], level)),
         'SKILL-ATTACK' : skill.scale_by_level(stats['SKILL-ATTACK'], level),
         'PHYS-ATTACK' : weapons.scale_weapon(stats['PHYS-ATTACK'], level)
     }
