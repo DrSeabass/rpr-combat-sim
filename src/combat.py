@@ -71,7 +71,7 @@ def do_atk_dam(attacker, target, weapon_min_dam, weapon_max_dam, hit_type):
     damage_boost = 1 + ((1.0 * strength) / stats.MAX_STAT)
     damage_roll = random.randint(weapon_min_dam, weapon_max_dam)
     damage = damage_boost * (damage_roll - effective_resist)
-    return math.trunc(damage_boost)
+    return math.trunc(damage)
 
 def do_spell_dam(caster, targets, spell, cast_type):
     caster_attune = caster['magic_attunement']
@@ -80,6 +80,7 @@ def do_spell_dam(caster, targets, spell, cast_type):
         return [0]
     elif cast_type == UNCONTROLLED:
         #TODO handle uncontrolled damage
+        print "Uncontrolled cast, no damage at the moment"
         return [0]
     else:
         damages = []
@@ -228,47 +229,56 @@ def setup_combat_order(party, enemies):
     order_scores.reverse()
     return order_scores
 
+def random_alive(team):
+    alive = []
+    for mem in team:
+        if mem['current_hp'] > 0:
+            alive.append(mem)
+    return random.choice(alive)
+
 def do_action(actor, targets, teammates, affil_string):
     avail_actions = [('HEAL', 0.1), ('SKILL-ATTACK', 0.2), ('PHYS-ATTACK', 0.7)]
     action_choice = random.random()
     selected = None
+    dmg_sum = 0
     for (action_nm, action_score) in avail_actions:
         if selected is None and action_score > action_choice:
             selected = action_nm
         else:
             action_choice -= action_score
-    if LOUD:
-        print affil_string, actor['label'], "takes action", selected
     if actor['current_ap'] < 0:
         selected = 'PHYS-ATTACK'
     if selected == 'HEAL':
-        trgs = [random.choice(teammates)]
+        trgs = [random_alive(teammates)]
         spell = actor['HEAL']
         cast_type, cost = use_skill_spell(actor, spell)
-        # TODO - Where do I subtract out AP from actor?
         actor['current_ap'] -= cost
         damages = do_spell_dam(actor, trgs, spell, cast_type)
         for ind in range(0,len(trgs)):
+            dmg_sum += damages[ind]
             trgs[ind]['current_hp'] -= damages[ind]
     elif selected == 'SKILL-ATTACK':
-        trgs = [random.choice(targets)]
+        trgs = [random_alive(targets)]
         spell = actor['SKILL-ATTACK']
         cast_type, cost = use_skill_spell(actor, spell)
         actor['current_ap'] -= cost
-        # TODO - Where do I subtract out AP from actor?
         damages = do_spell_dam(actor, trgs, spell, cast_type)
         for ind in range(0,len(trgs)):
+            dmg_sum += damages[ind]
             trgs[ind]['current_hp'] -= damages[ind]
             
     elif selected == 'PHYS-ATTACK':
-        target = random.choice(targets)
+        target = random_alive(targets)
         hit_type = check_hit(actor, target)
         weapon = target['PHYS-ATTACK']
         dam = do_atk_dam(actor, target,
                          weapon['min_dam'], weapon['max_dam'],
                          hit_type)
+        dmg_sum += dam
         target['current_hp'] -= dam
-        
+    if LOUD:
+#        print affil_string, actor['label'], "takes action", selected, "doing damage\t", dmg_sum
+        print affil_string, "takes action", selected, "doing damage\t", dmg_sum
     return selected
             
 
@@ -288,6 +298,14 @@ def run_combat_phase(party, enemies):
     while True:
         repeat = False
         for step in order:
+            if check_dead(party):
+                if LOUD:
+                    print "Party dead, exiting"
+                return
+            if check_dead(enemies):
+                if LOUD:
+                    print "Enemies dead, exiting"
+                return
             if step['score'] > 0:
                 if step['side'] == 'party':
                     actor = party[step['index']]

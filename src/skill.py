@@ -27,7 +27,7 @@ def scale_by_level(base, trgt_level):
         'cost' : math.trunc((1.0 * base['cost'] * trgt_level) / stats.MAX_LEVEL),
         'scales' : base['scales'],
         'difficulty_mod' : base['difficulty_mod'],
-        'damage' : 0
+        'damage' : (base['damage'] * trgt_level) / 100
     }
 
 def direct_damage_single_target_max():
