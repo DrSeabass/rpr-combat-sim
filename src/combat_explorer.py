@@ -97,8 +97,11 @@ def main():
                  mobs.normal_all, mobs.normal_weenie]
     mob_names = [ 'tough_decent', 'tough-weenie', 'decent-normal',
                   'normal_all', 'normal_weenie' ]
-    #win_loss_by_level(party, all_mobs, mob_names)
-    turn_delta_by_level(party, all_mobs, mob_names)
+    data = []
+    for enemies in all_mobs:
+        data.append(sample_by_level(party,enemies))
+    win_loss_by_level(party, all_mobs, mob_names, data=data)
+    turn_delta_by_level(party, all_mobs, mob_names, data=data)
     
     
 if __name__ == '__main__':
