@@ -293,23 +293,26 @@ def check_dead(char_list):
 def run_combat_phase(party, enemies):
     order = setup_combat_order(party,enemies)
     repeat = False
+    enemy_actions = 0
+    party_actions = 0
     while True:
         repeat = False
         for step in order:
             if check_dead(party):
                 if LOUD:
                     print "Party dead, exiting"
-                return
+                return party_actions, enemy_actions
             if check_dead(enemies):
                 if LOUD:
                     print "Enemies dead, exiting"
-                return
+                return party_actions, enemy_actions
             if step['score'] > 0:
                 if step['side'] == 'party':
                     actor = party[step['index']]
                     if not check_alive(actor):
                         step['score'] = 0
                     else:
+                        party_actions += 1
                         do_action(actor, enemies, party, "Party")
                         step['score'] -= DEFAULT_ACTION_COST
                         repeat = True
@@ -318,11 +321,12 @@ def run_combat_phase(party, enemies):
                     if not check_alive(actor):
                         step['score'] = 0
                     else:
+                        enemy_actions += 1
                         do_action(actor, party, enemies, "Enemy")
                         step['score'] -= DEFAULT_ACTION_COST
                         repeat = True
         if not repeat:
-            return
+            return party_actions, enemy_actions
 
 def reset_char(char):
     char['current_hp'] = char['max_hp']
@@ -344,11 +348,15 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
     party_dead = False
     enemy_dead = False
     turn = -1
+    party_actions = 0
+    enemy_actions = 0
     while not (party_dead or enemy_dead) and turn < max_turns:
         turn += 1
         if LOUD:
             print "Starting turn", turn 
-        run_combat_phase(party, enemies)
+        pact, eact = run_combat_phase(party, enemies)
+        party_actions += pact
+        enemy_actions += eact
         party_dead = check_dead(party)
         enemy_dead = check_dead(enemies)
 
@@ -360,7 +368,10 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
     return { 'party_survives': not party_dead,
              'hp_cost' : initial_hp - final_hp,
              'ap_cost' : initial_ap - final_ap,
-             'turns' : turn }
+             'turns' : turn,
+             'party_actions' : party_actions,
+             'enemy_actions' : enemy_actions,
+    }
 
 def sample_combat(party, enemies, samples=500, at_level=None):
     data = []
@@ -377,7 +388,8 @@ def main():
     hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    sample_combat(party, mobs.tough_decent, samples=1, at_level=75)
+    results = sample_combat(party, mobs.tough_decent, samples=1, at_level=75)
+    print results
     
     
 if __name__ == '__main__':
