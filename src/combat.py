@@ -8,7 +8,7 @@ import enemy_groups as mobs
 import skill
 
 ## PRINTF DEBUGGING
-LOUD = False
+LOUD = True
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
@@ -117,26 +117,26 @@ def use_skill_spell(caster, spell):
     cost_fraction =  (1.0 * cost) / caster['max_ap']
     if (level_rand * mind_scale) > uncontrolled_thresh:
         if random.random() < cost_fraction:
-            return UNCONTROLLED
+            return UNCONTROLLED, cost * 2
         else:
             if scales:
-                return POWER_CAST
+                return POWER_CAST, (3 * cost) / 2
             else:
-                return FULL_CAST
+                return FULL_CAST, cost
     elif (level_rand * mind_scale) > power_thresh:
         if scales:
-            return POWER_CAST
+            return POWER_CAST, (3 * cost) / 2
         else:
-            return FULL_CAST
+            return FULL_CAST, cost
     elif (level_rand * mind_scale) > normal_thresh:
-        return FULL_CAST
+        return FULL_CAST, cost
     elif (level_rand * mind_scale) >  half_thresh:
         if scales:
-            return HALF_EFFECT
+            return HALF_EFFECT, (3 * cost) / 4
         else:
-            return FIZZLE
+            return FIZZLE, cost / 4
     else:
-        return FIZZLE
+        return FIZZLE, cost / 4
 
 
 def simulate_cast(caster, spell, cst_levels=None, spell_levels=None, samples=100):
@@ -159,7 +159,7 @@ def simulate_cast(caster, spell, cst_levels=None, spell_levels=None, samples=100
         power_count = 0
         uncnt_count = 0
         for s in range (0, samples):
-            val = use_skill_spell(cst_level, spell_level)
+            val,cost = use_skill_spell(cst_level, spell_level)
             if val == FIZZLE:
                 fizz_count += 1
             elif val == HALF_EFFECT:
@@ -239,18 +239,22 @@ def do_action(actor, targets, teammates, affil_string):
             action_choice -= action_score
     if LOUD:
         print affil_string, actor['label'], "takes action", selected
+    if actor['current_ap'] < 0:
+        selected = 'PHYS-ATTACK'
     if selected == 'HEAL':
         trgs = [random.choice(teammates)]
         spell = actor['HEAL']
-        cast_type = use_skill_spell(actor, spell)
+        cast_type, cost = use_skill_spell(actor, spell)
         # TODO - Where do I subtract out AP from actor?
+        actor['current_ap'] -= cost
         damages = do_spell_dam(actor, trgs, spell, cast_type)
         for ind in range(0,len(trgs)):
             trgs[ind]['current_hp'] -= damages[ind]
     elif selected == 'SKILL-ATTACK':
         trgs = [random.choice(targets)]
         spell = actor['SKILL-ATTACK']
-        cast_type = use_skill_spell(actor, spell)
+        cast_type, cost = use_skill_spell(actor, spell)
+        actor['current_ap'] -= cost
         # TODO - Where do I subtract out AP from actor?
         damages = do_spell_dam(actor, trgs, spell, cast_type)
         for ind in range(0,len(trgs)):
