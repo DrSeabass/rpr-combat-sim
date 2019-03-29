@@ -8,7 +8,7 @@ import enemy_groups as mobs
 import skill
 
 ## PRINTF DEBUGGING
-LOUD = False
+LOUD = True
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
@@ -370,3 +370,15 @@ def sample_combat(party, enemies, samples=500, at_level=None):
         data.append(run_combat(party, enemies, at_level=at_level))
         samples -= 1
     return data
+
+
+def main():
+    hero_phys = chars.hero(stats.MENTAL, stats.FINESSE)
+    hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
+    hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
+    party = [hero_fin, hero_phys, hero_mnt]
+    sample_combat(party, mobs.tough_decent, samples=1, at_level=75)
+    
+    
+if __name__ == '__main__':
+    main()
