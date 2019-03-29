@@ -31,6 +31,33 @@ def sample_by_level(party,enemies):
         data.append(combat.sample_combat(party, enemies, at_level=level))
     return data
 
+def turn_delta_by_level(party, enemies_groups, group_names=None, data=None):
+    if data is None:
+        data = []
+        for enemies in enemies_groups:
+            data.append(sample_by_level(party,enemies))
+    plt.xlabel("Level")
+    plt.ylabel("PartyTurns - EnemyTurns")
+    index = -1
+    for by_enemy_group in data:
+        means = []
+        err = []
+        index += 1
+        for by_level in by_enemy_group:
+            these_values = []
+            for record in by_level:
+                delta = record['party_actions'] - record['enemy_actions']
+                these_values.append(delta)
+            summary = compute_mean_err(these_values)
+            means.append(summary['mean'])
+            err.append(summary['95_cid'])
+        if group_names is None:
+            plt.errorbar(range(1,100), means, yerr=err)
+        else:
+            plt.errorbar(range(1,100), means, yerr=err, label=group_names[index])
+    plt.legend()
+    plt.show()
+
 def win_loss_by_level(party, enemies_groups, group_names=None, data=None):
     if data is None:
         data = []
@@ -66,8 +93,12 @@ def main():
     hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    win_loss_by_level(party, [mobs.tough_decent, mobs.tough_weenie, mobs.decent_normal, mobs.normal_all, mobs.normal_weenie],
-                      ['tough_decent', 'tough-weenie', 'decent-normal', 'normal_all', 'normal_weenie'])
+    all_mobs = [ mobs.tough_decent, mobs.tough_weenie, mobs.decent_normal,
+                 mobs.normal_all, mobs.normal_weenie]
+    mob_names = [ 'tough_decent', 'tough-weenie', 'decent-normal',
+                  'normal_all', 'normal_weenie' ]
+    #win_loss_by_level(party, all_mobs, mob_names)
+    turn_delta_by_level(party, all_mobs, mob_names)
     
     
 if __name__ == '__main__':

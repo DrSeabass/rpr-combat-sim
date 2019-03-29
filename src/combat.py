@@ -8,7 +8,7 @@ import enemy_groups as mobs
 import skill
 
 ## PRINTF DEBUGGING
-LOUD = True
+LOUD = False
 
 ## Attack attempt outcome
 MISS = 0   # whiff, no damage
