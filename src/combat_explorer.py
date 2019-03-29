@@ -31,24 +31,33 @@ def sample_by_level(party,enemies):
         data.append(combat.sample_combat(party, enemies, at_level=level))
     return data
 
-def win_loss_by_level(party, enemies, data=None):
+def win_loss_by_level(party, enemies_groups, group_names=None, data=None):
     if data is None:
-        data = sample_by_level(party,enemies)
-    means = []
-    err = []
-    for by_level in data:
-        these_values = []
-        for record in by_level:
-            if record['party_survives']:
-                these_values.append(1)
-            else:
-                these_values.append(0)
-        summary = compute_mean_err(these_values)
-        means.append(summary['mean'])
-        err.append(summary['95_cid'])
+        data = []
+        for enemies in enemies_groups:
+            data.append(sample_by_level(party,enemies))
     plt.xlabel("Level")
     plt.ylabel("P(Party Win)")
-    plt.errorbar(range(1,100), means, yerr=err)
+    index = -1
+    for by_enemy_group in data:
+        means = []
+        err = []
+        index += 1
+        for by_level in by_enemy_group:
+            these_values = []
+            for record in by_level:
+                if record['party_survives']:
+                    these_values.append(1)
+                else:
+                    these_values.append(0)
+            summary = compute_mean_err(these_values)
+            means.append(summary['mean'])
+            err.append(summary['95_cid'])
+        if group_names is None:
+            plt.errorbar(range(1,100), means, yerr=err)
+        else:
+            plt.errorbar(range(1,100), means, yerr=err, label=group_names[index])
+    plt.legend()
     plt.show()
     
 
@@ -57,7 +66,8 @@ def main():
     hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
-    win_loss_by_level(party, mobs.tough_weenie)
+    win_loss_by_level(party, [mobs.tough_decent, mobs.tough_weenie, mobs.decent_normal, mobs.normal_all, mobs.normal_weenie],
+                      ['tough_decent', 'tough-weenie', 'decent-normal', 'normal_all', 'normal_weenie'])
     
     
 if __name__ == '__main__':
