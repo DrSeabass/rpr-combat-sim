@@ -33,8 +33,9 @@ ACTION_DIE_DIV = 40
 ACTION_DIE = 6
     
 def get_combat_action_score(character):
-    base_val = character['level'] / 3  + 2 * character['speed']
-    num_die = 1 + base_val / ACTION_DIE_DIV
+    base_val = character['level'] / 3.0  + 5 * character['speed']
+    num_die = int(math.ceil(1 + base_val / ACTION_DIE_DIV))
+    #print base_val, num_die
     sum = 0
     for i in range(0,num_die):
         sum += random.randint(1,ACTION_DIE)
@@ -373,7 +374,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
              'enemy_actions' : enemy_actions,
     }
 
-def sample_combat(party, enemies, samples=500, at_level=None):
+def sample_combat(party, enemies, samples=50, at_level=None):
     data = []
     while samples > 0:
         reset_party(party)

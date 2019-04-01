@@ -89,10 +89,11 @@ def win_loss_by_level(party, enemies_groups, group_names=None, data=None):
     
 
 def main():
-    hero_phys = chars.hero(stats.MENTAL, stats.FINESSE)
-    hero_fin = chars.hero(stats.MENTAL, stats.PHYSICAL)
-    hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
-    party = [hero_fin, hero_phys, hero_mnt]
+    warrior = chars.hero(stats.MENTAL, stats.FINESSE)
+    archer = chars.hero(stats.MENTAL, stats.PHYSICAL)
+    priest = chars.hero(stats.FINESSE, stats.PHYSICAL)
+    mage = chars.hero(stats.PHYSICAL, stats.FINESSE)
+    party = [warrior, archer, mage, priest]
     all_mobs = [ mobs.tough_decent, mobs.tough_weenie, mobs.decent_normal,
                  mobs.normal_all, mobs.normal_weenie]
     mob_names = [ 'tough_decent', 'tough-weenie', 'decent-normal',

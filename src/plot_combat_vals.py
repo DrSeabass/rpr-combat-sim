@@ -41,10 +41,11 @@ def plot_action_scores(characters, levels = None, samples = 5000):
     for character in characters:
         data = get_action_scores(character, levels = levels, samples = samples)
         for dataset in data:
-            n, bins, patches = plot.hist(dataset)
+            n, bins, patches = plot.hist(dataset, label=character['label'])
     plot.xlabel("Combat Score")
     plot.ylabel("Frequency")
     plot.title("combat scores")
+    plot.legend()
     plot.grid(True)
     plot.show()
     
@@ -53,14 +54,15 @@ def main():
     hero_phys = mobs.hero(stats.MENTAL, stats.FINESSE)
     hero_fin = mobs.hero(stats.MENTAL, stats.PHYSICAL)
     hero_mnt = mobs.hero(stats.FINESSE, stats.PHYSICAL)
-    normal_phys = mobs.normal(stats.MENTAL, stats.FINESSE)
+    hero_mnt_2 = chars.hero(stats.PHYSICAL, stats.FINESSE)
+    normal_phys = mobs.normal(stats.FINESSE,stats.MENTAL)
     single_target_max = skill.direct_damage_single_target_max()
     #low_level_run = range(1,20) + ([20] * 81)
     #plot_attacks(hero_fin, normal_phys, atk_levels=low_level_run, samples=1000)
     #plot_attacks(hero_fin, normal_phys, samples=1000)
     #spell_10 = [50] * 100
     #plot_casts(hero_mnt, single_target_max, spell_levels = spell_10)
-    plot_action_scores([hero_phys, hero_fin, hero_mnt], levels = [10])
+    plot_action_scores([hero_phys, hero_fin, hero_mnt, normal_phys], levels = [5])
     
     
 if __name__ == '__main__':
