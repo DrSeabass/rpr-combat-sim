@@ -267,6 +267,10 @@ def weenie(weak1, weak2):
 # You could move the min stats up, and not go level 15-100 Instead,
 # you could set the minimum stat at 10, then things would scale about
 # as well.
+
+# That seems reasonable, but does not work.  Enemies scale the same way,
+# so they just end up with a larger leg up on the PCs.  You have to start things
+# around level 14 or so.
 def stats_of_level(stats, level):
     ret_val = {
         'label' : stats['label'],
