@@ -27,7 +27,7 @@ def compute_mean_err(data):
 
 def sample_by_level(party,enemies):
     data = []
-    for level in range(1,100):
+    for level in range(15,100):
         data.append(combat.sample_combat(party, enemies, at_level=level))
     return data
 
@@ -52,9 +52,9 @@ def turn_delta_by_level(party, enemies_groups, group_names=None, data=None):
             means.append(summary['mean'])
             err.append(summary['95_cid'])
         if group_names is None:
-            plt.errorbar(range(1,100), means, yerr=err)
+            plt.errorbar(range(15,100), means, yerr=err)
         else:
-            plt.errorbar(range(1,100), means, yerr=err, label=group_names[index])
+            plt.errorbar(range(15,100), means, yerr=err, label=group_names[index])
     plt.legend()
     plt.show()
 
@@ -81,9 +81,9 @@ def win_loss_by_level(party, enemies_groups, group_names=None, data=None):
             means.append(summary['mean'])
             err.append(summary['95_cid'])
         if group_names is None:
-            plt.errorbar(range(1,100), means, yerr=err)
+            plt.errorbar(range(15,100), means, yerr=err)
         else:
-            plt.errorbar(range(1,100), means, yerr=err, label=group_names[index])
+            plt.errorbar(range(15,100), means, yerr=err, label=group_names[index])
     plt.legend()
     plt.show()
     
