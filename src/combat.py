@@ -246,26 +246,59 @@ def select_action(actor, targets, teammates):
             percent = (1.0 * teammate['current_hp']) / teammate['max_hp']
             if percent <= 0.25:
                 return team_ind, 'HEAL'
-        # haven't healed, roll dice on skill vs attack
-        action_rand = random.random()
-        min_ind = None
-        min_hp = None
-        ind = -1
-        for target in target:
-            ind += 1
-            if min_hp is None:
-                min_hp = target['current_hp']
-                min_ind = ind
-            elif min_hp < target['current_hp']:
-                min_hp = target['current_hp']
-                min_ind = ind
-        if action_rand > 0.2 or actor['current_ap'] <= 0: #skill attack
-            return min_ind, 'PHYS-ATTACK'
-        else:
-            return min_ind, 'SKILL-ATTACK'
-            
+    # haven't healed, roll dice on skill vs attack
+    action_rand = random.random()
+    min_ind = None
+    min_hp = None
+    ind = -1
+    for target in targets:
+        ind += 1
+        if min_hp is None:
+            min_hp = target['current_hp']
+            min_ind = ind
+        elif min_hp < target['current_hp'] and target['current_hp'] > 0:
+            min_hp = target['current_hp']
+            min_ind = ind
+    if action_rand > 0.2 or actor['current_ap'] <= 0: #skill attack
+        return min_ind, 'PHYS-ATTACK'
+    else:
+        return min_ind, 'SKILL-ATTACK'
 
-def do_action(actor, targets, teammates, affil_string):
+def considered_action(actor, targets, teammates, affil_string):
+    target_ind, selected = select_action(actor, targets, teammates)
+    dmg_sum = 0
+    if selected == 'HEAL':
+        trgs = [teammates[target_ind]]
+        spell = actor['HEAL']
+        cast_type, cost = use_skill_spell(actor, spell)
+        actor['current_ap'] -= cost
+        damages = do_spell_dam(actor, trgs, spell, cast_type)
+        for ind in range(0,len(trgs)):
+            dmg_sum += damages[ind]
+            trgs[ind]['current_hp'] -= damages[ind]
+    elif selected == 'SKILL-ATTACK':
+        trgs = [targets[target_ind]]
+        spell = actor['SKILL-ATTACK']
+        cast_type, cost = use_skill_spell(actor, spell)
+        actor['current_ap'] -= cost
+        damages = do_spell_dam(actor, trgs, spell, cast_type)
+        for ind in range(0,len(trgs)):
+            dmg_sum += damages[ind]
+            trgs[ind]['current_hp'] -= damages[ind]
+    elif selected == 'PHYS-ATTACK':
+        target = targets[target_ind]
+        hit_type = check_hit(actor, target)
+        weapon = target['PHYS-ATTACK']
+        dam = do_atk_dam(actor, target,
+                         weapon['min_dam'], weapon['max_dam'],
+                         hit_type)
+        dmg_sum += dam
+        target['current_hp'] -= dam
+    if LOUD:
+        print affil_string, "takes action", selected, "doing damage\t", dmg_sum
+    return selected
+
+def rand_action(actor, targets, teammates, affil_string):
     avail_actions = [('HEAL', 0.1), ('SKILL-ATTACK', 0.2), ('PHYS-ATTACK', 0.7)]
     action_choice = random.random()
     selected = None
@@ -344,7 +377,7 @@ def run_combat_phase(party, enemies):
                         step['score'] = 0
                     else:
                         party_actions += 1
-                        do_action(actor, enemies, party, "Party")
+                        considered_action(actor, enemies, party, "Party")
                         step['score'] -= DEFAULT_ACTION_COST
                         repeat = True
                 else:
@@ -353,7 +386,7 @@ def run_combat_phase(party, enemies):
                         step['score'] = 0
                     else:
                         enemy_actions += 1
-                        do_action(actor, party, enemies, "Enemy")
+                        considered_action(actor, party, enemies, "Enemy")
                         step['score'] -= DEFAULT_ACTION_COST
                         repeat = True
         if not repeat:
