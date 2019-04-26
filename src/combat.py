@@ -29,11 +29,11 @@ DEFAULT_ACTION_COST = 10
 def fix_seed():
     random.seed(314159)
 
-ACTION_DIE_DIV = 40
-ACTION_DIE = 6
+ACTION_DIE_DIV = 20
+ACTION_DIE = 3
     
 def get_combat_action_score(character):
-    base_val = character['level'] / 3.0  + 5 * character['speed']
+    base_val = character['level'] / 3.0  + 2.5 * character['speed']
     num_die = int(math.ceil(1 + base_val / ACTION_DIE_DIV))
     #print base_val, num_die
     sum = 0
@@ -235,6 +235,36 @@ def random_alive(team):
             alive.append(mem)
     return random.choice(alive)
 
+def select_action(actor, targets, teammates):
+    """ Use mild intelegence to select action"""
+    action = None
+    target = None
+    if actor['current_ap'] > 0:
+        team_ind = -1
+        for teammate in teammates:
+            team_ind += 1
+            percent = (1.0 * teammate['current_hp']) / teammate['max_hp']
+            if percent <= 0.25:
+                return team_ind, 'HEAL'
+        # haven't healed, roll dice on skill vs attack
+        action_rand = random.random()
+        min_ind = None
+        min_hp = None
+        ind = -1
+        for target in target:
+            ind += 1
+            if min_hp is None:
+                min_hp = target['current_hp']
+                min_ind = ind
+            elif min_hp < target['current_hp']:
+                min_hp = target['current_hp']
+                min_ind = ind
+        if action_rand > 0.2 or actor['current_ap'] <= 0: #skill attack
+            return min_ind, 'PHYS-ATTACK'
+        else:
+            return min_ind, 'SKILL-ATTACK'
+            
+
 def do_action(actor, targets, teammates, affil_string):
     avail_actions = [('HEAL', 0.1), ('SKILL-ATTACK', 0.2), ('PHYS-ATTACK', 0.7)]
     action_choice = random.random()
@@ -374,7 +404,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
              'enemy_actions' : enemy_actions,
     }
 
-def sample_combat(party, enemies, samples=50, at_level=None):
+def sample_combat(party, enemies, samples=500, at_level=None):
     data = []
     while samples > 0:
         reset_party(party)
