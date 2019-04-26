@@ -26,10 +26,18 @@ pip via pip, python -m pip install -U pip
 matplotlib via pip, python -m pip install -U matplotlib
 
 # Repository layout
-TBD
+Everything is flat in src
 
 # Running the Simulator
-TBD
+## python plot_derived_stats.py
+	show me the stats associated with each class of character by level
+## python plot_combat_vals.p
+	show me turn order information by level
+## python weapon.py
+	show me weapon damage by level
+
+## python combat_explorer
+	Simulate combat and show results
 
 # Contributors
 Seabass what for writing this mess
