@@ -264,6 +264,9 @@ def weenie(weak1, weak2):
     compute_derived_stats(base)
     return base
 
+# You could move the min stats up, and not go level 15-100 Instead,
+# you could set the minimum stat at 10, then things would scale about
+# as well.
 def stats_of_level(stats, level):
     ret_val = {
         'label' : stats['label'],
