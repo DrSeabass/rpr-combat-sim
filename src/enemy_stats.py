@@ -180,40 +180,40 @@ def normal(weak1, weak2):
     # weak group
     if weak1 == PHYSICAL:
         base['label'] = "Normal - Weak Physical"
-        base['strength'] = math.trunc(0.25 * base['strength'])
-        base['toughness'] = math.trunc(0.25 * base['toughness'])
+        base['strength'] = math.trunc(0.2 * base['strength'])
+        base['toughness'] = math.trunc(0.2 * base['toughness'])
     elif weak1 == FINESSE:
         base['label'] = "Normal - Weak Finesse"
-        base['dexterity'] = math.trunc(0.25 * base['dexterity'])
-        base['speed'] = math.trunc(0.25 * base['speed'])
+        base['dexterity'] = math.trunc(0.2 * base['dexterity'])
+        base['speed'] = math.trunc(0.2 * base['speed'])
     elif weak1 == MENTAL:
         base['label'] = "Normal - Weak Mental"
-        base['intellect'] = math.trunc(0.25 * base['intellect'])
-        base['spirit'] = math.trunc(0.25 * base['spirit'])
+        base['intellect'] = math.trunc(0.2 * base['intellect'])
+        base['spirit'] = math.trunc(0.2 * base['spirit'])
     if weak2 == PHYSICAL:
         base['label'] += ", Weak Physical"
-        base['strength'] = math.trunc(0.25 * base['strength'])
-        base['toughness'] = math.trunc(0.25 * base['toughness'])
+        base['strength'] = math.trunc(0.2 * base['strength'])
+        base['toughness'] = math.trunc(0.2 * base['toughness'])
     elif weak2 == FINESSE:
         base['label'] += ", Weak Finesse"
-        base['dexterity'] = math.trunc(0.25 * base['dexterity'])
-        base['speed'] = math.trunc(0.25 * base['speed'])
+        base['dexterity'] = math.trunc(0.2 * base['dexterity'])
+        base['speed'] = math.trunc(0.2 * base['speed'])
     elif weak2 == MENTAL:
         base['label'] += ", Weak Mental"
-        base['intellect'] = math.trunc(0.25 * base['intellect'])
-        base['spirit'] = math.trunc(0.25 * base['spirit'])
+        base['intellect'] = math.trunc(0.2 * base['intellect'])
+        base['spirit'] = math.trunc(0.2 * base['spirit'])
     if ((weak1 == PHYSICAL and weak2 == FINESSE) or
         (weak2 == PHYSICAL and weak1 == FINESSE)):
-        base['intellect'] = math.trunc(0.5 * base['intellect'])
-        base['spirit'] = math.trunc(0.5 * base['spirit'])
+        base['intellect'] = math.trunc(0.4 * base['intellect'])
+        base['spirit'] = math.trunc(0.4 * base['spirit'])
     elif ((weak1 == PHYSICAL and weak2 == MENTAL) or
           (weak2 == PHYSICAL and weak1 == MENTAL)):
-        base['dexterity'] = math.trunc(0.5 * base['dexterity'])
-        base['speed'] = math.trunc(0.5 * base['speed'])
+        base['dexterity'] = math.trunc(0.4 * base['dexterity'])
+        base['speed'] = math.trunc(0.4 * base['speed'])
     elif ((weak1 == FINESSE and weak2 == MENTAL) or
           (weak2 == FINESSE and weak2 == MENTAL)):
-        base['strength'] = math.trunc(0.5 * base['strength'])
-        base['toughness'] = math.trunc(0.5 * base['toughness'])
+        base['strength'] = math.trunc(0.4 * base['strength'])
+        base['toughness'] = math.trunc(0.4 * base['toughness'])
     compute_derived_stats(base)
     return base
 
