@@ -4,7 +4,7 @@ import weapons
 
 def god():
     stats = { 'label' : "God",
-              'level' : 100, 
+              'level' : 100,
               'strength' : MAX_STAT,
               'toughness': MAX_STAT,
               'dexterity': MAX_STAT,
@@ -221,7 +221,7 @@ def weenie(weak1, weak2):
     if weak2 > weak1:
         return weenie(weak2, weak1)
     if weak1 == weak2:
-        print "You can't double up on weenie weakness!"
+        #print "You can't double up on weenie weakness!"
         return None
     base = god()
     # weak group
@@ -287,7 +287,7 @@ def stats_of_level(stats, level):
     }
     compute_derived_stats(ret_val)
     return ret_val
-    
+
 def party_of_level(party, level):
     ret_val = []
     for pmem in party:
@@ -298,9 +298,9 @@ def main():
     w1 = weenie(PHYSICAL, FINESSE)
     w2 = weenie(PHYSICAL, MENTAL)
     w3 = weenie(FINESSE, MENTAL)
-    print "Phys, Finnesse", w1
-    print "Phys, Mental", w2
-    print "Finesse, Mental", w3
+    print("Phys, Finnesse", w1)
+    print("Phys, Mental", w2)
+    print("Finesse, Mental", w3)
 
 if __name__ == '__main__':
     main()

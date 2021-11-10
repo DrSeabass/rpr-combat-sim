@@ -31,7 +31,7 @@ def fix_seed():
 
 ACTION_DIE_DIV = 20
 ACTION_DIE = 3
-    
+
 def get_combat_action_score(character):
     base_val = character['level'] / 3.0  + 2.5 * character['speed']
     num_die = int(math.ceil(1 + base_val / ACTION_DIE_DIV))
@@ -40,7 +40,7 @@ def get_combat_action_score(character):
     for i in range(0,num_die):
         sum += random.randint(1,ACTION_DIE)
     return sum
-    
+
 def check_hit(attacker, target):
     evade = target['evasion']
     acc = attacker['dexterity']
@@ -171,10 +171,10 @@ def simulate_cast(caster, spell, cst_levels=None, spell_levels=None, samples=100
             elif val == UNCONTROLLED:
                 uncnt_count += 1
             this_level.append(val)
-        print level, "\tfizzle\t", fizz_count, "\thalf\t", hlf_count, "\tfull\t", full_count, "\tpower\t", power_count, "\tuncontrolled\t", uncnt_count
+        print(level, "\tfizzle\t", fizz_count, "\thalf\t", hlf_count, "\tfull\t", full_count, "\tpower\t", power_count, "\tuncontrolled\t", uncnt_count)
         results.append(this_level)
     return results
-            
+
 def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=100):
     results = []
     for level in range(1,100):
@@ -204,9 +204,9 @@ def simulate_attacks(attack, target, atk_levels=None, trg_levels=None, samples=1
             elif val == CRIT:
                 crit_count += 1
             this_level.append(val)
-        print level, "\tmiss\t", miss_count, "\tglance\t", glance_count, "\thit\t", hit_count,"\tcrit\t", crit_count
+        print(level, "\tmiss\t", miss_count, "\tglance\t", glance_count, "\thit\t", hit_count,"\tcrit\t", crit_count)
         results.append(this_level)
-    return results    
+    return results
 
 def setup_combat_order(party, enemies):
     order_scores = []
@@ -295,7 +295,7 @@ def considered_action(actor, targets, teammates, affil_string):
         dmg_sum += dam
         target['current_hp'] -= dam
     if LOUD:
-        print affil_string, "takes action", selected, "doing damage\t", dmg_sum
+        print(affil_string, "takes action", selected, "doing damage\t", dmg_sum)
     return selected
 
 def rand_action(actor, targets, teammates, affil_string):
@@ -328,7 +328,7 @@ def rand_action(actor, targets, teammates, affil_string):
         for ind in range(0,len(trgs)):
             dmg_sum += damages[ind]
             trgs[ind]['current_hp'] -= damages[ind]
-            
+
     elif selected == 'PHYS-ATTACK':
         target = random_alive(targets)
         hit_type = check_hit(actor, target)
@@ -340,13 +340,13 @@ def rand_action(actor, targets, teammates, affil_string):
         target['current_hp'] -= dam
     if LOUD:
 #        print affil_string, actor['label'], "takes action", selected, "doing damage\t", dmg_sum
-        print affil_string, "takes action", selected, "doing damage\t", dmg_sum
+        print(affil_string, "takes action", selected, "doing damage\t", dmg_sum)
     return selected
-            
+
 
 def check_alive(char):
     return char['current_hp'] > 0
-        
+
 def check_dead(char_list):
     for char in char_list:
         #some character is alive
@@ -364,11 +364,11 @@ def run_combat_phase(party, enemies):
         for step in order:
             if check_dead(party):
                 if LOUD:
-                    print "Party dead, exiting"
+                    print("Party dead, exiting")
                 return party_actions, enemy_actions
             if check_dead(enemies):
                 if LOUD:
-                    print "Enemies dead, exiting"
+                    print("Enemies dead, exiting")
                 return party_actions, enemy_actions
             if step['score'] > 0:
                 if step['side'] == 'party':
@@ -399,8 +399,8 @@ def reset_char(char):
 def reset_party(party):
     for mem in party:
         reset_char(mem)
-        
-def run_combat(party, enemies, at_level = None, max_turns = 100):    
+
+def run_combat(party, enemies, at_level = None, max_turns = 100):
     if at_level:
         party = mobs.party_of_level(party, at_level)
         enemies = mobs.party_of_level(enemies, at_level)
@@ -417,7 +417,7 @@ def run_combat(party, enemies, at_level = None, max_turns = 100):
     while not (party_dead or enemy_dead) and turn < max_turns:
         turn += 1
         if LOUD:
-            print "Starting turn", turn 
+            print("Starting turn", turn)
         pact, eact = run_combat_phase(party, enemies)
         party_actions += pact
         enemy_actions += eact
@@ -453,8 +453,8 @@ def main():
     hero_mnt = chars.hero(stats.FINESSE, stats.PHYSICAL)
     party = [hero_fin, hero_phys, hero_mnt]
     results = sample_combat(party, mobs.tough_decent, samples=1, at_level=75)
-    print results
-    
-    
+    print(results)
+
+
 if __name__ == '__main__':
     main()
